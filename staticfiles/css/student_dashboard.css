@@ -1,0 +1,66 @@
+
+.student-page-container {
+    max-width: 520px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+    
+    
+}
+
+.student-page-container {
+    max-width: 520px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    
+    
+}
+
+.section {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 10px rgba(142, 41, 41, 0.1);
+    padding: 20px;
+    
+}
+
+.section-title {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 10px;
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input-container label {    
+    display: block;
+    font-weight: bolder;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    
+}
+
+.input-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #dedede;
+    border-radius: 9px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+}
+
+.input-container input[disabled] {
+    cursor: not-allowed;
+}

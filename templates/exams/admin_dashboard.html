@@ -1,0 +1,49 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_dashboard.css' %}">
+<div class="container"> 
+    <div class="courses-container">
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Registered Students</h2>
+                <p>{{total_student}}</p>
+                <button><a href="admin-view-student">View Students</a></button>
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Total Teachers</h2>
+                <p>{{total_teacher}}</p>
+                <button><a href="admin-view-teacher">View Teachers</a></button>
+
+
+            </div>
+            
+        </div>
+    
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Total Courses</h2>
+                <p>{{total_course}}</p>
+                <button><a href="admin-view-course">View Courses</a></button>
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Available Questions</h2>
+                <p>{{total_question}}</p>
+                <button><a href="admin-view-question">View Questions</a></button>
+
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock %}

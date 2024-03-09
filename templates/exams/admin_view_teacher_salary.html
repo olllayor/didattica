@@ -1,0 +1,49 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1 class="title">Teacher's Salary</h1>
+        <div class="update-info">
+            
+
+        </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Photo</th>
+                    <th>Phone Number</th>
+                    <th>Salary</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in teachers %}
+                <tr>
+                    <td>{{t.get_name}}</td>
+                    <td></td>
+                    <td>{{t.mobile}}</td>
+                    <td>{{t.salary}}</td>                   
+                    
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">There are no salary yet.</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

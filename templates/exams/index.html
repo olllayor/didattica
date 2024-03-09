@@ -1,0 +1,38 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <title>DidatticaUz</title>
+</head>
+
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form action="">
+                    <h2>Welcome DidatticaUz</h2>
+                    <h4>Passing exams with us isn't just about grades</h4>
+                    <h4>It's about unlocking the doors to your future success
+                    </h4>
+                    <div class="student">
+                      <a href="/students/studentclick" class="btn">Student</a>
+                    </div>
+                    <div class="teacher">                        
+                      <a href="/teachers/teacherclick" class="btn">Teacher</a>
+                    </div>
+                    <div class="admin">                        
+                      <a href="/adminclick" class="btn">Admin</a>
+                    </div>            
+                </form>
+            </div>
+        </div>
+    </section>
+    {% include 'exams/footer.html' %}
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_add_question.css' %}">
+<body>
+    
+<h2 style="text-align:center;">Add Question</h2>
+<form method="POST" enctype="multipart/form-data" autocomplete="off" class="form-container">
+
+    {% csrf_token %}
+    <div class="form-group">
+        <!-- Your form fields go here -->
+        <label for="courseID">Course</label>
+        {% render_field questionForm.courseID class="form-control" required="required" %}
+
+        <label for="question">Question</label>
+        {% render_field questionForm.question class="form-control"required="required" placeholder=""%}
+
+        <label for="picture">Image</label>
+        {% render_field questionForm.picture class="form-control" %}
+
+        <label for="question_number">Marks</label>
+        {% render_field questionForm.marks class="form-control" required="required" placeholder="Ex: 3 points"%}
+
+        <label for="option1">A)</label>
+        {% render_field questionForm.option1 class="form-control"nrequired="required" placeholder=""%}
+
+        <label for="option2">B)</label>
+        {% render_field questionForm.option2 class="form-control" required="required" placeholder=""%}
+
+        <label for="option3">C)</label>
+        {% render_field questionForm.option3 class="form-control" required="required" placeholder=""%}
+
+        <label for="option4">D)</label>
+        {% render_field questionForm.option4 class="form-control" required="required" placeholder=""%}
+        
+        <label for="option4">Correct Answer: </label>
+        {% render_field questionForm.answer class="form-control" required="required" %}
+
+        <button type="submit" class="btn btn-success">Submit Question</button>
+    </div>
+</form>
+</body>
+{% endblock content %}

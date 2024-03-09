@@ -1,0 +1,49 @@
+{% load widget_tweaks %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DidatticaUz</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/adminbase.css' %}">
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+          <img src="{% static 'images/logo1.png' %}" alt="Turin Polito">
+        </div>
+        <button class="nav-toggle" aria-label="toggle navigation">
+            <span class="hamburger"></span>
+        </button>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="/teachers/teacher-dashboard"><i class="fas fa-home"></i>Dashboard</a></li>           
+            <li class="nav-item"><a href="/teachers/teacher-exam"><i class="fas fa-book"></i>Courses</a></li>
+            <li class="nav-item"><a href="/teachers/teacher-question"><i class="fas fa-question-circle"></i>Questions</a></li>
+            <li class="nav-item"><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        </ul>        
+    </nav>
+    
+    {% block content %}
+    {% endblock %}
+ 
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+    
+        navToggle.addEventListener('click', function () {
+            navMenu.classList.toggle('nav-menu-visible');
+        });
+    });
+    </script>
+    
+</html>
+

@@ -1,0 +1,79 @@
+{% extends 'students/studentbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_dashboard.css' %}">
+</head>
+<body>
+<div class="content-container">
+    <div class="student-page-container">
+        <!-- Personal Information Section -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-user"></i> Personal Information</h2>
+            <div class="input-container">
+                <label for="first-name">First name</label>
+                <input type="text" id="first-name" value="{{request.user.first_name}}" disabled>
+            </div>
+            <div class="input-container">
+                <label for="last-name">Last name</label>
+                <input type="text" id="last-name" value="{{request.user.last_name}}" disabled>
+            </div>
+            <div class="input-container">
+                <label for="email">Email</label>
+                <input type="email" id="email" value="polito@example.com" disabled>
+            </div>
+            
+        </div>
+
+    <!-- Contact Information Section -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-phone"></i> Contact Information</h2>
+            <div class="input-container">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" value="{{request.user.mobile}}" disabled>
+            </div>
+            <div class="input-container">
+                <label for="emergency-contact">Social Media Contact</label>
+                <input type="text" id="emergency-contact" value="@polito" disabled>
+            </div>
+        </div>
+
+    <!-- Academic Progress Section -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i>Academic Progress</h2>
+            <div class="input-container">
+                <label for="gpa">GPA</label>
+                <input type="text" id="gpa" value="3.5" disabled>
+            </div>
+            <div class="input-container">
+                <label for="completed-credits">Completed Credits</label>
+                <input type="text" id="completed-credits" value="60/180" disabled>
+            </div>
+        </div>
+        <div class="upgrade-container">
+            <div class="upgrade-box">
+                <h2>Upgrade to Pro</h2>
+                <p>Unlock all features and get unlimited access to our support team</p>
+                <button><a href="/students/student-pro">Upgrade</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+</body>
+
+
+{% endblock content %}
+
+

@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background: #0f0;
+    background: url('../images/background.jpg')no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.form-box{
+    position: relative;
+    width: 480px;
+    height:370px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 30px;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+}
+h2{
+    font-size: 2.2em;
+    font-weight: 1000;
+    color: #ffffff;
+    text-align: center;
+}
+h4{
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+
+}
+
+/* Style the anchor tags as buttons */
+.student a,
+.teacher a,
+.admin a {
+    display: inline-block; /* Make anchor tags behave like blocks */
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    background: #000000;
+    color: #fff;
+    border: solid #000000;
+    outline: none;
+    cursor: grab;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center; /* Center the text */
+    text-decoration: none; /* Remove underline */
+    line-height: 40px; /* Vertically center text */
+    transition: background 0.3s ease;
+    margin-top: 20px; /* Adjust margin as needed */
+    cursor: grab;
+}
+
+.student a:hover,
+.teacher a:hover,
+.admin a:hover {
+    background: #ffffff;
+    color: #000000;
+}

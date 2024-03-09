@@ -1,0 +1,48 @@
+{% extends 'students/studentbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1 class="title">My marks</h1>
+        <div class="update-info">
+            
+        </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in courses %}
+                <tr>
+                    <td>{{t.course_name}}</td>
+                    
+                    <td class="actions">
+                        <a class="btn-edit" href="{% url 'check-marks' t.id  %}">
+                            <small class="fa fa-eye"></small>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">There are no marks yet.</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_teacher.css' %}">
+
+
+<div class="container"> 
+    <div class="courses-container">
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Students</h2>
+                <p>Total registered students &nbsp;&nbsp;- &nbsp;&nbsp; {{total_student}}</p>
+                <button><a href="admin-view-student">View Students</a></button>
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Student Marks</h2>
+                <p>Student's marks &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-eye"></i></p>
+                <button><a href="admin-view-student-marks">View Marks</a></button>
+
+
+            </div>
+            
+        </div>    
+    </div>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.quiz-form {
+    margin-top: 20px;
+}
+
+.question {
+    margin-bottom: 20px;
+}
+
+.question p {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.question-number {
+    font-weight: normal;
+    color: #555;
+}
+.no-questions-message {
+    text-align: center;
+    color: #272626;
+    font-size: 1.3em;
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin: 5px 0;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+.icon {
+    font-size: 1.25rem; /* Adjust size as needed */
+    
+    
+}
+.button-style {
+    display: block;
+    border: solid;
+    font-family: inherit;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #000000;
+    border-radius: 15px;
+    cursor: grab;
+}
+
+.button-style:hover {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+
+/* ... previous styles ... */
+
+/* Style for the label when the radio button is checked */
+input[type="radio"]:checked + label {
+    background-color: #606060; /* Light blue background */
+    color: #ffffff; /* Darker blue text color */
+    border-radius: 15px; /* Rounded corners for the label */
+}
+
+/* Hide the default radio button */
+input[type="radio"] {
+    display: none;
+}
+
+img.question-image {
+    max-width: 100%;
+    height: auto;    
+    padding: 5px;    
+    
+}
+
+
+/* Style for the label */
+label {
+    padding: 0.5em 1em; /* Spacing inside the label */
+    border: 1px solid #f1f1f1; /* Light blue border */
+    border-radius: 15px;
+    display: grid;
+    margin-bottom: 0.5em; /* Spacing below each label */
+    cursor: grab; /* Indicate that the label is clickable */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+/* Style for label:hover for a visual effect before selection */
+label:hover {
+    background-color: #40b83c; /* Slightly darker blue on hover */
+    border-radius: 15px;
+}

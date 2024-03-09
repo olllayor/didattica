@@ -1,0 +1,48 @@
+{% extends 'students/studentbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/admin_view_student.css' %}"
+/>
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <h1 class="title">Results</h1>
+    <div class="update-info"></div>
+  </div>
+  <div class="table-container">
+    {% if results %}
+    <table>
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Total marks</th>
+          <th>Number of attempts</th>
+          <th>Teacher</th>
+          <th>Exam date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in results %}
+        <tr>
+          <td>{{t.exam}}</td>
+          <td>{{t.marks}}</td>
+          <td>Attempt {{ forloop.counter }}</td>
+          <td>{{teacher_name}}</td>
+          <td>{{t.date}}</td>
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-align:center">First you need to solve the test</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

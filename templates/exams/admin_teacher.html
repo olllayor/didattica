@@ -1,0 +1,42 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_teacher.css' %}">
+
+
+<div class="container"> 
+    <div class="courses-container">
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Teachers</h2>
+                <p>Total approved teachers - {{total_teacher}}</p>
+                <button><a href="admin-view-teacher">View Teachers</a></button>
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Pending Teachers</h2>
+                <p>Waiting for approved - {{pending_teacher}}</p>
+                <button><a href="admin-view-pending-teacher">View Teachers</a></button>
+
+
+            </div>
+            
+        </div>
+    
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Total Salary </h2>
+                <p>Total teacher's salary - ${{salary}}</p>
+                <button><a href="admin-view-teacher-salary">View Salary</a></button>
+
+            </div>            
+        </div>        
+    </div>
+
+{% endblock %}

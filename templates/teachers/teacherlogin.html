@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load widget_tweaks %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/studentlogin.css' %}">
+    <title>Login</title>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form action="" method="post" class="box">
+                    {% csrf_token %}
+                    <h2>Login</h2>
+                    <div class="inputbox">
+                        <ion-icon name="at-circle"></ion-icon>
+                        {{ form.username|add_class:"form-control" }}
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed"></ion-icon>
+                        {{ form.password|add_class:"form-control" }}
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="forget">
+                        <label for="">
+                            <input type="checkbox" name="remember_me">
+                            Remember Me
+                            <a href="#">Forget password</a>
+                        </label>
+                    </div>
+                    <button type="submit">Login</button>
+                    <div class="register">
+                        <p>Don't have an account <a href="studentsignup">Register</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    {% include 'exams/footer.html' %}
+</body>
+</html>

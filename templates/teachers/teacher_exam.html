@@ -1,0 +1,31 @@
+{% extends 'teachers/teacherbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_teacher.css' %}">
+
+
+<div class="container"> 
+    <div class="courses-container">
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Add Courses</h2>
+                <p><i class="fas fa-plus f-left"></i></p>
+                <button><a href="teacher-add-exam">Add</a></button>
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>View Courses</h2>
+                <p><i class="fas fa-eye f-left"></i></p>
+                <button><a href="teacher-view-exam">View</a></button>
+            </div>
+            
+        </div>    
+    </div>
+
+{% endblock %}

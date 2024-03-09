@@ -1,0 +1,45 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1 class="title">Available Questions</h1>
+        <div class="update-info">
+            
+           
+        </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Questions</th>                    
+                    <th>Mark</th>
+                    <th>Action</th>
+                    
+                </tr>
+                </thead>
+                <tbody>
+                    {% for c in questions %}
+                    <tr>
+                        <td>{{c.question}}</td>
+                        <td>{{c.marks}}</td>
+                        <td class="actions">
+                            <a class="btn-delete" href="{% url 'delete-question' c.id  %}">
+                                <small class="fas fa-trash"></small>
+                            </a>
+                        </td>                        
+                    </tr>
+                    {% empty %}
+                    <br>
+                    <li>There is no question yet.</li>
+                    {% endfor %}
+                </tbody>
+                </table>
+                </div>
+                </div>
+{% endblock %}

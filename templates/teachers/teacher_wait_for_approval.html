@@ -1,0 +1,49 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <title>Request Review</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/teacher_wait_for_approval.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Your request is being reviewed</h1>
+        <p>Please wait while we process your request. This should only take a few moments.</p>
+    </div>
+    <div class="status">
+        <div class="status-item">
+            <ion-icon name="at-circle"></ion-icon>
+            <span id="receivedTime" >Your request was received at <span id="requestTime"></span></span>
+        </div>        
+    </div>
+    <a href="/logout" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+    
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateTime() {
+            var now = new Date();
+            var timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            document.getElementById('requestTime').textContent = timeString;
+            
+        }
+    
+        updateTime();
+        // Update the time every minute
+        setInterval(updateTime, 60000);
+    });
+    
+    
+</script>
+</body>
+</html>

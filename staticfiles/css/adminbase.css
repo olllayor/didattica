@@ -1,0 +1,168 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    padding: 0 20px;
+    justify-content: space-between;
+}
+
+.logo img {
+   
+    height: 70px; /* Adjust the size as necessary */
+    
+
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.nav-item {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    cursor: grab;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    cursor: grab;
+}
+
+.nav-item a i {
+    margin-right: 8px;
+}
+.nav-item.active,
+.nav-item:hover {
+    background-color: #e0e0e0;
+    border-radius: 20px;
+    cursor: grab;
+}
+
+
+.student-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    /* Light grey background */
+}
+
+.profile-image {
+    width: 100px;
+    /* Adjust as needed */
+    height: 100px;
+    /* Adjust as needed */
+    border-radius: 50%;
+    background-color: #ffffff;
+    /* White background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: auto;
+}
+
+.student-info {
+    text-align: left;
+}
+
+.student-id,
+.student-name {
+    margin: 0;
+    color: #333;
+    /* Dark grey color for the text */
+    font-weight: normal;
+}
+
+.student-id {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.student-name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-toggle .hamburger {
+    width: 25px;
+    height: 2px;
+    background: black;
+    display: block;
+    position: relative;
+}
+
+.nav-toggle .hamburger::before,
+.nav-toggle .hamburger::after {
+    content: "";
+    background: black;
+    width: 25px;
+    height: 2px;
+    display: block;
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-toggle .hamburger::before { top: -8px; }
+.nav-toggle .hamburger::after { bottom: -8px; }
+
+.nav-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 60px; /* Adjust based on your navbar height */
+        left: 0;
+        right: 0;
+        background: white;
+        border-top: 1px solid #eee;
+        flex-direction: column;
+        width: 100%;
+        display: none;
+    }
+
+    .nav-menu-visible {
+        display: flex;
+    }
+
+    .nav-item {
+        justify-content: center;
+    }
+}

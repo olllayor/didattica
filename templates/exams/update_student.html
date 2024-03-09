@@ -1,0 +1,51 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/update_student.css' %}">
+
+
+<body>
+  
+<div class="student-page-container">
+    <form method="post" autocomplete="off" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Personal Information Section -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-user"></i> Personal Information</h2>
+            <div class="input-container">
+                <label for="first_name">First Name</label>
+                {% render_field userForm.first_name id="first-name" %}
+            </div>
+            <div class="input-container">
+                <label for="last_name">Last Name</label>
+                {% render_field userForm.last_name id="last-name" %}
+            </div>
+            <div class="input-container">
+                <label for="username">Username</label>
+                {% render_field userForm.username id="username" %}
+            </div>
+            
+            <div class="input-container">
+                <label for="student_id">Student ID</label>
+                {% render_field studentForm.student_id id="student_id" %}
+            </div>
+            <div class="input-container">
+                <label for="mobile">Phone</label>
+                {% render_field studentForm.mobile id="phone" %}
+            </div>
+            <div class="input-container">
+                <label for="password">Password</label>
+                {% render_field userForm.password id="password" %}
+            </div>
+        </div>     
+        <input type="submit" class="btn-update" value="Update">
+
+    </form>
+</div>
+</body>
+
+{% endblock content %}
+
+

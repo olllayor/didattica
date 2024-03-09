@@ -1,0 +1,28 @@
+{% extends 'students/studentbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+<head>
+    <title>Results</title>
+</head>
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_exam.css' %}">
+
+    <div class="courses-container">
+        {% if courses %}
+            {% for t in courses %}
+            <div class="course-card">
+                <div class="course-info">
+                    <h2>{{ t.course_name }}</h2>
+                    <p>Teacher: @{{ t.creator.username }}</p> <!-- Use the get_name method from the Teacher model -->
+                    <button><a href="{% url 'check-marks' t.id %}">View result</a></button>
+
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-courses-message">
+                <p>Courses will be added soon</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

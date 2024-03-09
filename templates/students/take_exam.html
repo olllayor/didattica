@@ -1,0 +1,62 @@
+{% extends 'students/studentbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/take_exam.css' %}">
+    <!-- Include Ionicons library -->
+    <link href="https://cdn.jsdelivr.net/npm/ionicons@5.x/dist/css/ionicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="card">
+        <div class="content">
+            <div class="title">{{ course.course_name }} Exam</div>
+            <p class="description">
+                Please read the instructions carefully before starting the exam.
+            </p>
+        </div>
+        <div class="info-section">
+            {% comment %} <div class="info-item">
+                <ion-icon class="icon" name="time-outline"></ion-icon>
+                <div class="info-text">Duration: 60 minutes</div>
+            </div> {% endcomment %}
+            <div class="info-item">
+                <ion-icon class="icon" name="document-text"></ion-icon>
+                <div class="info-text">Format: Multiple Choice</div>
+            </div>
+            <div class="info-item">
+                <ion-icon class="icon" name="alert-circle"></ion-icon>
+                <div class="info-text">You may have to use a scientific calculator</div>
+            </div>
+            <div class="info-item">
+                <ion-icon class="icon" name="notifications-circle"></ion-icon>
+                <div class="info-text">You will be able to view marks immediately once after you submit the answer.</div>
+            </div>
+        </div>
+        
+        <div class="rules">
+            <h3>Details</h3>
+            <ul>
+                <li>Course : <b>{{course.course_name}}</b></li>
+                <li>Teacher: <b>{{ teacher_name }}</b></li> 
+                <li>Total Question : <b>{{course.question_number}}</b></li>
+                <li>Total Marks : <b>{{course.total_marks}}</b></li>
+                <li>Credit : <b>{{course.credit}}</b></li>
+            </ul>
+        </div>
+        <div class="support">
+            <h3>Support</h3>
+            <p>If you have any questions or need assistance, please contact the exam teacher.(<b>@{{course.creator.username}}</b>).</p>
+        </div>
+        <div class="button-container">
+            <button class="start-exam-btn"><a href="{% url 'start-exam' course.id  %}">Start Exam</a></button>
+        </div>
+    </div>
+</body>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'exams/adminbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1 class="title">Students</h1>
+        <div class="update-info">
+            
+            <span class="font-semibold">Last updated:</span><span>2 hours ago</span>
+        </div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Student ID</th>
+                    <th>Username</th>
+                    <th>Actions</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in students %}
+                <tr>
+                    <td>{{t.get_name}}</td>
+                    <td>{{t.mobile}}</td>
+                    <td>{{t.student_id}}</td>
+                    <td>{{t.username}}</td>
+                    <td class="actions">
+                        <a class="btn-edit" href="{% url 'update-student' t.id  %}">
+                            <small class="fas fa-edit"></small>
+                        </a>
+                        <a class="btn-delete" href="{% url 'delete-student' t.id  %}">
+                            <small class="fas fa-trash"></small>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">There are no student yet.</td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

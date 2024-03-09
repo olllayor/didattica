@@ -1,0 +1,41 @@
+{% extends 'teachers/teacherbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_dashboard.css' %}">
+<div class="container"> 
+    <div class="courses-container">
+        {% comment %} <div class="course-card">
+            <div class="course-info">
+                <h2>Registered Students</h2>
+                <br>
+                <p>{{total_student}}</p>
+                
+
+            </div>
+            
+        </div>         {% endcomment %}
+    
+        <div class="course-card">
+            <div class="course-info">
+                <h2><i class="fas fa-book"></i>  Total Courses </h2>
+                <p>Created by @{{ teacher_name }}</p>
+                
+                <p>{{total_course}}</p>                
+
+            </div>
+            
+        </div>
+        <div class="course-card">
+            <div class="course-info">
+                <h2>Total Questions</h2>
+                <br>
+                <p>{{total_question}}</p>
+                
+            </div>
+            
+        </div>
+    </div>
+
+{% endblock %}

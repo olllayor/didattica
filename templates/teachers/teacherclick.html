@@ -1,0 +1,38 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/studentclick.css' %}">
+    <title>DidatticaUz</title>
+</head>
+
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form action="">
+                    {% csrf_token %}
+                    <h2>Hello Teacher</h2>
+                    <h4>Join and upgrade student's level
+                    </h4>
+                    <div class="signup">
+                        <button type="button" class="btn" onclick="window.location.href='{% url 'teachersignup' %}'">Sign Up</button>
+                    </div>
+                    <div class="login">                        
+                        <button type="button" class="btn" onclick="window.location.href='{% url 'teacherlogin' %}'">Login</button>
+                    </div>
+                      
+                  
+                    
+                </form>
+            </div>
+        </div>
+    </section>
+    {% include 'exams/footer.html' %}
+</body>
+</html>

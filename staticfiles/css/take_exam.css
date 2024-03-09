@@ -1,0 +1,107 @@
+body {
+    font-family: "Inter", sans-serif;    
+    margin: 0;
+    padding: 20px;    
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+   
+}
+
+.card {
+    background-color: #ffffff;
+    color: #4a5568;
+    border-radius: 0.8rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 640px; /* approx. max-w-3xl */
+    margin: auto;
+    
+}
+
+.content, .info-section, .instructions, .rules, .support {
+    padding: 1rem; /* approx. p-6 */
+}
+
+.title {
+    font-weight: bold;
+    text-align: center;
+    font-size: larger;
+}
+
+.description {
+    margin-top: 0.5rem;
+    color: #7d8691;
+    font-size: 0.875rem; /* approx. text-sm */
+    line-height: 1.25; /* leading-normal */
+}
+
+.info-section {
+    display: grid;
+    color: #707780;
+    font-weight: bolder;
+    grid-gap: 1rem; /* gap-4 */
+    padding-top: 0;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* gap-2 */
+}
+
+.info-text {
+    font-size: 0.875rem; /* text-sm */
+    font-weight: medium;
+}
+
+.icon {
+    /* Adjust size as needed */
+    opacity: 2.7;
+   
+}
+
+
+.instructions h3, .rules h3, .support h3 {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+ul li, .instructions p, .support p {
+    font-size: 0.875rem; /* text-sm */
+}
+
+.button-container {
+    padding: 1.5rem; /* approx. p-6 */
+    padding-top: 0;
+    display: flex;
+    justify-content: center; /* Center button in the container */
+}
+
+.start-exam-btn {
+    padding: 0.8rem 1.2rem; /* Padding Y and X */
+    font-size: 1rem; /* Base font size */
+    font-weight: bold;
+    color: white;
+    background-color: #000000; /* Button background color */
+    border: solid;
+    border-radius: 18px; /* Rounded border */
+    cursor: grab;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.start-exam-btn:hover {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0); /* Darker shade on hover */
+}
+button a {
+    color: inherit;
+    text-decoration: none;
+    cursor: grab;
+}

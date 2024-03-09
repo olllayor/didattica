@@ -1,0 +1,106 @@
+{% extends 'teachers/teacherbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}" />
+</head>
+<div id="message-container" style="width: auto;"></div>
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1 class="title">Courses</h1>
+        <div class="update-info"></div>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Total question</th>
+                    <th>Total marks</th>
+                    <th>Credit</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{course.course_name}}</td>
+                    <td>{{course.question_number}}</td>
+                    <td>{{course.total_marks}}</td>
+                    <td>{{course.credit}}</td>
+
+                    <td class="actions">
+                        <a
+              class="btn-delete"
+              href="{% url 'delete-exam' course.id  %}"
+              data-id="{{ course.id }}"
+            >
+                            <small class="fas fa-trash"></small>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">There are no courses yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.btn-delete').click(function(e) {
+            e.preventDefault();
+            var deleteUrl = $(this).attr('href');
+            var rowElement = $(this).closest('tr'); // Get the closest tr parent element
+
+            $.ajax({
+                url: deleteUrl,
+                type: 'GET',
+                success: function(response) {
+                    if (response.status == 'success') {
+                        rowElement.fadeOut(400, function() {
+                            $(this).remove(); // Remove the row after fade out effect
+                        });
+
+                        // Add Bootstrap alert classes for styling the message
+                        $('#message-container').html(
+                            '<div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center; background: #1FC149;">' +
+                            response.message +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            '</div>'
+                        );
+                        $('#message-container').show();
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    if (xhr.status == 404) {
+                        $('#message-container').html(
+                            '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">' +
+                            'The course could not be found or has already been deleted.' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            '</div>'
+                        );
+                        $('#message-container').show();
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+</script>
+
+

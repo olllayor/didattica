@@ -1,0 +1,26 @@
+{% extends 'teachers/teacherbase.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_add_course.css' %}">
+
+<h2 style="text-align:center;">Add Course</h2>
+<form method="POST" autocomplete="off" class="form-container">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="course_name">Course Name</label>
+        {% render_field courseForm.course_name|attr:"class:form-control" id="course_name" placeholder="Ex: Circuit Theory" %}
+        
+        <label for="question_number">Total Question</label>
+        {% render_field courseForm.question_number|attr:"class:form-control" id="question_number" placeholder="Ex: 20" %}
+        
+        <label for="total_marks">Total Marks</label>
+        {% render_field courseForm.total_marks|attr:"class:form-control" id="total_marks" placeholder="Ex: 30" %}
+    
+        <label for="credit">Credit</label>
+        {% render_field courseForm.credit|attr:"class:form-control" id="credit" placeholder="Ex: 8" %}
+    </div>
+
+    <button type="submit" class="btn">Submit Course</button>
+</form>
+{% endblock %}

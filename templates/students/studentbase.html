@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DidatticaUz</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/studentbase.css' %}">
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+          <img src="{% static 'images/logo1.png' %}" alt="Turin Polito">
+        </div>
+        <button class="nav-toggle" aria-label="toggle navigation">
+            <span class="hamburger"></span>
+        </button>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="/students/student-dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
+            <li class="nav-item"><a href="/students/student-exam"><i class="fas fa-book"></i>Exams</a></li>
+            <li class="nav-item"><a href="/students/student-marks"><i class="fa fa-list-alt"></i></i>Results</a></li>
+            <li class="nav-item"><a href="/logout"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        </ul>
+        
+        
+    </nav>
+    <div class="student-profile">
+        <div class="profile-image">
+            <!-- Image placeholder if you have an image to put here -->
+            <img src="{% static 'images/student_id.jpg' %}" alt="Student Image">
+        </div>
+        <div class="student-info">
+            <p class="student-id">Student ID: <b>{{ request.user.student.student_id }}</b></p>
+            <p class="student-name">{{ request.user.first_name|add:" "|add:request.user.last_name }}</p>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+ 
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+    
+        navToggle.addEventListener('click', function () {
+            navMenu.classList.toggle('nav-menu-visible');
+        });
+    });
+    </script>
+</html>
+

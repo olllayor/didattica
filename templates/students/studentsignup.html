@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/studentsignup.css' %}">
+    <title>Sign Up</title>
+</head>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form method="POST" autocomplete="off" enctype="multipart/form-data" class="box" onsubmit="return validateForm()">
+                    {% csrf_token %}
+                    <h2>Sign Up</h2>
+
+                    <!-- Render the fields manually if widget_tweaks is causing issues -->
+                    <div class="inputbox">
+                        <ion-icon name="person"></ion-icon>
+                        <input type="text" id="first_name" name="first_name" required>
+                        <label for="first_name">First Name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="person"></ion-icon>
+                        <input type="text" id="last_name" name="last_name" required>
+                        <label for="last_name">Last Name</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="call"></ion-icon>
+                        <input type="tel" id="mobile" name="mobile" required>
+                        <label for="mobile">Phone Number</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="at-circle"></ion-icon>
+                        <input type="text" id="username" name="username" required>
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="id-card"></ion-icon>
+                        <input type="text" id="student_id" name="student_id" required>
+                        <label for="student_id">Student ID</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="eye-outline" id="togglePassword"></ion-icon>
+                        <input type="password" id="password" name="password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="eye-outline" id="toggleConfirmPassword"></ion-icon>
+                        <input type="password" id="password1" name="password1" required>
+                        <label for="password1">Confirm Password</label>
+                        <span id="passwordError" style="color: red;"></span>
+                    </div>
+                    
+                    <button type="submit" class="btn">Sign Up</button>
+                    <div class="register">
+                        <p>Already have an account? <a href="{% url 'studentlogin' %}">Login</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    {% include 'exams/footer.html' %}
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script>
+        var togglePassword = document.getElementById('togglePassword');
+        var toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        var password = document.getElementById('password');
+        var confirmPassword = document.getElementById('password1');
+
+        togglePassword.addEventListener('click', function () {
+            var type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            togglePassword.classList.toggle('ion-eye-off-outline');
+        });
+
+        toggleConfirmPassword.addEventListener('click', function () {
+            var type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            toggleConfirmPassword.classList.toggle('ion-eye-off-outline');
+        });
+
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("password1").value;
+            if (password != confirmPassword) {
+                document.getElementById("passwordError").innerHTML = "Passwords do not match.";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
+2

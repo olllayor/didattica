@@ -1,0 +1,108 @@
+
+.content-container {
+    display: flex;
+    justify-content: space-between; /* Align content to the sides */
+    
+}
+
+.student-page-container {
+    display: flex;
+    max-width: 520px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    
+    gap: 20px;
+    padding: 20px;
+    /* Subtract width of the upgrade box */
+    flex: 1; /* Ensure it fills the space left */
+   
+    
+}
+
+.section {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 10px rgba(142, 41, 41, 0.1);
+    padding: 20px;
+    
+}
+
+.section-title {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eeeeee;
+    padding-bottom: 10px;
+}
+
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input-container label {    
+    display: block;
+    font-weight: bolder;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    
+}
+
+.input-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #dedede;
+    border-radius: 9px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    color: #909090;
+}
+
+.input-container input[disabled] {
+    cursor: not-allowed;
+}
+
+.upgrade-container {
+    flex-basis: 250px; /* Width of the upgrade box */
+    flex-shrink: 0; 
+    text-align: center;
+    padding: 20px;
+}
+
+.upgrade-box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upgrade-box h2 {
+    margin-bottom: 10px;
+}
+
+.upgrade-box p {
+    margin-bottom: 20px;
+}
+
+.upgrade-box button {
+    background-color: #000;
+    color: #fff;
+    border: solid;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: grab;
+    font-size: 16px;
+}
+button a {
+    color: inherit;
+    text-decoration: none;
+    cursor: grab;
+}
+
+.upgrade-box button:hover {
+    background-color: #ffffff;
+    color: #000;
+}
