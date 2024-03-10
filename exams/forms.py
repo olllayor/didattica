@@ -25,3 +25,7 @@ class QuestionForm(forms.ModelForm):
             'question': forms.Textarea(attrs={'rows': 3, 'cols': 50}),
             # Add other widgets here as needed
         }
+
+
+class AIQuestionForm(forms.Form):
+    user_input = forms.CharField(widget=forms.HiddenInput())

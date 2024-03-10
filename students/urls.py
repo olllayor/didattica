@@ -22,6 +22,7 @@ urlpatterns = [
     path('check-marks/<int:pk>', views.check_marks_view,name='check-marks'),
     path('student-marks', views.student_marks_view,name='student-marks'),
     path('student-pro', views.student_pro_view,name='student-pro'),
+    # path('ask_ai', views.ask_ai,name='ask_ai'),
 
 ] 
 if settings.DEBUG:

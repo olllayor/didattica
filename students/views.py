@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
@@ -8,7 +9,18 @@ from . import forms, models
 from exams import models as QMODEL
 from students import models as SMODEL
 from exams import forms as QFORM
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import requests
+from django.conf import settings
+import openai, os
+from dotenv import load_dotenv
 # Create your views here.
+load_dotenv()
+openai_api_key = os.getenv('OPENAI_API_KEY')
+
+
 
 def studentclick_view(request):
     if request.user.is_authenticated:
@@ -134,3 +146,33 @@ def check_marks_view(request,pk):
 def student_marks_view(request):
     courses = QMODEL.Course.objects.select_related('creator').all()
     return render(request, 'students/student_marks.html', {'courses':courses})
+
+# @login_required(login_url='studentlogin')
+# @user_passes_test(is_student)
+# @csrf_exempt
+# def ask_ai(request):
+#     if 'openai_api_key' in request.session and request.method == 'POST':
+#         openai.api_key = request.session['openai_api_key']
+#         user_input = request.POST.get('user_input')
+#         question_id = request.POST.get('question_id')
+
+#         try:
+#             response = openai.Completion.create(
+#                 engine="text-davinci-003",
+#                 prompt=user_input,
+#                 max_tokens=256,
+#                 temperature=0.5,
+#             )
+#             ai_response = response.choices[0].text.strip()
+#             # Storing AI response in the session keyed by question ID
+#             request.session[f'ai_response_{question_id}'] = ai_response
+#         except Exception as e:
+#             print(f"Error calling OpenAI: {e}")
+#             # Optionally handle the error, e.g., by setting a default error message
+#             request.session[f'ai_response_{question_id}'] = "Sorry, there was an error processing your request."
+
+#         # Redirecting back to the previous page
+#         return redirect(request.META.get('HTTP_REFERER', '/'))
+
+#     # Handling the case where the method is not POST or the key is not in session
+#     return JsonResponse({'error': 'Request not allowed'}, status=405)

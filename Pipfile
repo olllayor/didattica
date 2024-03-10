@@ -9,7 +9,9 @@ psycopg2-binary = "*"
 pillow = "*"
 django-widget-tweaks = "*"
 django-debug-toolbar = "*"
-
+requests = "*"
+openai = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

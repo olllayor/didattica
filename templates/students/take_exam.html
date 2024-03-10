@@ -5,6 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/student_exam.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" type="text/css" href="{% static 'css/take_exam.css' %}">
     <!-- Include Ionicons library -->
     <link href="https://cdn.jsdelivr.net/npm/ionicons@5.x/dist/css/ionicons.min.css" rel="stylesheet">
@@ -13,7 +16,7 @@
 <body>
     <div class="card">
         <div class="content">
-            <div class="title">{{ course.course_name }} Exam</div>
+            <div class="title">{{ course.course_name }} exam</div>
             <p class="description">
                 Please read the instructions carefully before starting the exam.
             </p>
