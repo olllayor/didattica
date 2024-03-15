@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
-OPENAI_API_KEY = "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"
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-$%e5_12d&f)u9x&k18p6m!l*mrl#sb51)3$ms+n#usd9c7$wh(
 DEBUG = True
 
 # ALLOWED_HOSTS = ["didattica.jprq.app", '127.0.0.1', "demo.jprq.app"]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app', 'didattica.uz']
 CSRF_TRUSTED_ORIGINS = [
     'https://*.jprq.app',
     'https://127.0.0.1'
