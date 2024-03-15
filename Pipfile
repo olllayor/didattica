@@ -12,6 +12,7 @@ django-debug-toolbar = "*"
 requests = "*"
 openai = "*"
 python-dotenv = "*"
+aiohttp = "*"
 
 [dev-packages]
 

@@ -56,8 +56,8 @@
     box-sizing: border-box;
     background-color: #ffffff;
     font-size: 14px;
-    font-weight: 500;
-    color: #909090;
+    font-weight: bolder;
+    color: #6e6e6e;
 }
 
 .input-container input[disabled] {

@@ -17,6 +17,7 @@ class CourseForm(forms.ModelForm):
 
 class QuestionForm(forms.ModelForm):
     courseID = forms.ModelChoiceField(queryset=models.Course.objects.all(), empty_label="Select Course", to_field_name="id")
+    image_url = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = models.Question

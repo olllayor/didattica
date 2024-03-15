@@ -1,6 +1,6 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 .container {
-    max-width: 700px;
+    max-width: 600px;
     margin: auto;
     background-color: #fff;
     padding: 20px;
@@ -21,9 +21,67 @@ h1 {
 .question {
     margin-bottom: 20px;
 }
+/* Flexbox layout for the question header */
+.question-header {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Space out the question and marks */
+    margin-bottom: 10px; /* Add some space below the header */
+}
+
+.question-text {
+    flex-grow: 1; /* Allow the question text to fill the space */
+    margin-right: 20px; /* Add some space between question text and marks */
+}
+.question-footer {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Align items to the start of the footer */
+    align-items: center;
+    margin-top: 10px; /* Add some space above the footer */
+}
+
+.marks-text {
+    font-weight: bold;
+    color: #555;
+    margin-right: 20px; /* Add space between the marks and the button */
+}
+
+.ai-button {
+    margin-left: auto;
+    padding: 10px 12px;
+    background-color: #7647cd; /* Adjust color to match your design */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: grab;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    text-align: end;
+}
+
+.ai-button .ai-button-icon {
+    margin-right: 10px; /* Adjust spacing as necessary */
+}
+
+.ai-button:hover {
+    background-color: #4f2ea3; /* Slightly darker shade of purple for the hover effect */
+}
+/* Adjustments to existing styles for a better layout */
+.question-number, .question p {
+    display: inline; /* Make them inline for flexbox */
+    margin-right: 5px; /* Add some space after the question number */
+}
+
+/* Other existing styles remain unchanged */
+
 
 .question p {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -85,6 +143,14 @@ input[type="radio"] {
     display: none;
 }
 
+img.question-image {
+    max-width: 100%;
+    height: auto;    
+    padding: 5px;    
+    
+}
+
+
 /* Style for the label */
 label {
     padding: 0.5em 1em; /* Spacing inside the label */
@@ -100,4 +166,15 @@ label {
 label:hover {
     background-color: #40b83c; /* Slightly darker blue on hover */
     border-radius: 15px;
+}
+
+
+
+
+.ai-answer {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-style: italic;
 }

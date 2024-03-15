@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from exams import models as QMODEL
 from students import models as SMODEL
 from exams import forms as QFORM
-
+from exams import upload_image
 def teacherclick_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
@@ -106,6 +106,15 @@ def teacher_add_question_view(request):
             try:                    
                 question = questionForm.save(commit=False)
                 question.course = questionForm.cleaned_data['courseID']
+                image_file = request.FILES.get('picture')
+                if image_file:
+                    try:
+                        image_url = upload_image.upload_image_to_telegraph(image_file)
+                        question.picture = image_url
+                    except Exception as e:
+                        print(e)
+                        messages.error(request, 'Failed to upload image. Please try again.')
+                        
                 question.save()
                 return HttpResponseRedirect('/teachers/teacher-view-question')
             except QMODEL.Course.DoesNotExist:

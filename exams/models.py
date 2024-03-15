@@ -11,6 +11,8 @@ class Course(models.Model):
     credit = models.PositiveIntegerField()
     total_marks = models.PositiveIntegerField()
     creator = models.ForeignKey('teachers.Teacher', related_name='created_courses', on_delete=models.SET_NULL, null=True, blank=True)
+    
+    
     def __str__(self):
         return self.course_name
     
@@ -20,7 +22,7 @@ class Question(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     marks = models.PositiveIntegerField()
     question = models.CharField(max_length=600)
-    picture = models.ImageField(upload_to='question_pictures', blank=True, null=True)
+    picture = models.URLField(max_length=1024, blank=True, null=True) 
     option1 = models.CharField(max_length=100)
     option2 = models.CharField(max_length=100)
     option3 = models.CharField(max_length=100)

@@ -18,8 +18,9 @@
         <label for="question">Question</label>
         {% render_field questionForm.question class="form-control"required="required" placeholder=""%}
 
-        <label for="picture">Image</label>
-        {% render_field questionForm.picture class="form-control" %}
+        <label for="image_url">Image</label>
+        <input type="file" name="picture" class="form-control">
+
 
         <label for="question_number">Marks</label>
         {% render_field questionForm.marks class="form-control" required="required" placeholder="Ex: 3 points"%}

@@ -55,11 +55,13 @@ def is_student(user):
 @login_required(login_url='studentlogin')
 @user_passes_test(is_student)
 def student_dashboard_view(request):
-    dict = {
-        'total_course': QMODEL.Course.objects.all().count(),
-        'total_question': QMODEL.Question.objects.all().count(),
-    }
-    return render(request, 'students/student_dashboard.html', context=dict)
+    students = SMODEL.Student.objects.get(user=request.user)
+    context = {'request': request, 'student': students}
+    # dict = {
+    #     'total_course': QMODEL.Course.objects.all().count(),
+    #     'total_question': QMODEL.Question.objects.all().count(),
+    # }
+    return render(request, 'students/student_dashboard.html', {'student': students})
 @login_required(login_url='studentlogin')
 @user_passes_test(is_student)
 def student_pro_view(request):

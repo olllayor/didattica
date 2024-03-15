@@ -1,23 +1,22 @@
-
-.student-page-container {
-    max-width: 520px;
-    margin: auto;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+.content-container {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 50px;
-    
+    justify-content: space-between; /* Align content to the sides */
     
 }
 
 .student-page-container {
+    display: flex;
     max-width: 520px;
     margin: auto;
     display: flex;
     flex-direction: column;
+    
     gap: 20px;
     padding: 20px;
-    
+    /* Subtract width of the upgrade box */
+    flex: 1; /* Ensure it fills the space left */
+   
     
 }
 
@@ -57,10 +56,53 @@
     box-sizing: border-box;
     background-color: #ffffff;
     font-size: 14px;
-    font-weight: 500;
-    color: #909090;
+    font-weight: bolder;
+    color: #6e6e6e;
 }
 
 .input-container input[disabled] {
     cursor: not-allowed;
+}
+
+.upgrade-container {
+    flex-basis: 250px; /* Width of the upgrade box */
+    flex-shrink: 0; 
+    text-align: center;
+    padding: 20px;
+}
+
+.upgrade-box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upgrade-box h2 {
+    margin-bottom: 10px;
+}
+
+.upgrade-box p {
+    margin-bottom: 20px;
+}
+
+.upgrade-box button {
+    background-color: #000;
+    color: #fff;
+    border: solid;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: grab;
+    font-size: 16px;
+}
+button a {
+    color: inherit;
+    text-decoration: none;
+    cursor: grab;
+}
+
+.upgrade-box button:hover {
+    background-color: #ffffff;
+    color: #000;
 }

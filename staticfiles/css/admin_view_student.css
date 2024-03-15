@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
 .content-wrapper {
     padding: 24px;
 }
@@ -62,10 +64,12 @@ tbody tr:hover {
 }
 
 /* Default styles for buttons (apply to all screen sizes) */
-.btn-edit,
+.btn-edit {
+  background-color: rgb(5, 158, 0); /* Bootstrap primary color for .btn-edit */
+}
 .btn-delete {
   /* Existing styles you provided */
-  background-color: rgb(5, 158, 0); /* Bootstrap primary color for .btn-edit */
+  background-color: #000000; /* Bootstrap primary color for .btn-edit */
   /* Bootstrap danger color for .btn-delete */
 }
 

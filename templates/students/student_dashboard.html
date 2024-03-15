@@ -27,10 +27,10 @@
                 <label for="last-name">Last name</label>
                 <input type="text" id="last-name" value="{{request.user.last_name}}" disabled>
             </div>
-            <div class="input-container">
+            {% comment %} <div class="input-container">
                 <label for="email">Email</label>
                 <input type="email" id="email" value="polito@example.com" disabled>
-            </div>
+            </div> {% endcomment %}
             
         </div>
 
@@ -39,17 +39,18 @@
             <h2 class="section-title"><i class="fas fa-phone"></i> Contact Information</h2>
             <div class="input-container">
                 <label for="phone">Phone</label>
-                <input type="tel" id="phone" value="{{request.user.mobile}}" disabled>
+                <input type="tel" id="phone" value="{{student.mobile}}" disabled>
             </div>
-            <div class="input-container">
+            
+            {% comment %} <div class="input-container">
                 <label for="emergency-contact">Social Media Contact</label>
                 <input type="text" id="emergency-contact" value="@polito" disabled>
-            </div>
+            </div> {% endcomment %}
         </div>
 
     <!-- Academic Progress Section -->
         <div class="section">
-            <h2 class="section-title"><i class="fas fa-graduation-cap"></i>Academic Progress</h2>
+            <h2 class="section-title"><i class="fas fa-graduation-cap"></i>Academic Progress(Beta)</h2>
             <div class="input-container">
                 <label for="gpa">GPA</label>
                 <input type="text" id="gpa" value="3.5" disabled>
@@ -63,6 +64,7 @@
             <div class="upgrade-box">
                 <h2>Upgrade to Pro</h2>
                 <p>Unlock all features and get unlimited access to our support team</p>
+                <p>COMING SOON</p>
                 <button><a href="/students/student-pro">Upgrade</a></button>
             </div>
         </div>
