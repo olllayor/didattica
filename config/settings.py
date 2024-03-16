@@ -37,10 +37,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 # ALLOWED_HOSTS = ["didattica.jprq.app", '127.0.0.1', "demo.jprq.app"]
-ALLOWED_HOSTS = ['.vercel.app', 'didattica.uz', '98.70.77.175']
+ALLOWED_HOSTS = ['.vercel.app', 'didattica.uz', '98.70.77.175', '0.0.0.0']
 CSRF_TRUSTED_ORIGINS = [
     'https://*.jprq.app',
-    'https://98.70.77.175'
+    'http://98.70.77.175',
+    'http://0.0.0.0',
 ]
 
 
