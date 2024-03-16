@@ -4,24 +4,35 @@
       {
         "src": "config/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-      },
-      {
-        "src": "build_files.sh",
-        "use": "@vercel/static-build",
         "config": {
-          "distDir": "staticfiles"
+          "maxLambdaSize": "50mb"
         }
       }
     ],
     "routes": [
       {
         "src": "/static/(.*)",
+        "headers": {
+          "cache-control": "s-maxage=31536000, immutable"
+        },
         "dest": "/static/$1"
+      },
+      {
+        "src": "/media/(.*)",
+        "dest": "/media/$1"
       },
       {
         "src": "/(.*)",
         "dest": "config/wsgi.py"
       }
-    ]
+    ],
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "config.settings"
+    },
+    "build": {
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "config.settings"
+      }
+    }
   }
+  
