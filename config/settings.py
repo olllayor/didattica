@@ -33,7 +33,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-$%e5_12d&f)u9x&k18p6m!l*mrl#sb51)3$ms+n#usd9c7$wh('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = ["didattica.jprq.app", '127.0.0.1', "demo.jprq.app"]
 ALLOWED_HOSTS = ['98.70.77.175', 'localhost', '127.0.0.1', 'didattica.uz', '0.0.0.0']
