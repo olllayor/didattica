@@ -39,7 +39,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['98.70.77.175', 'localhost', '127.0.0.1', 'didattica.uz', '0.0.0.0']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.jprq.app',
+    'http://didattica.uz',
     'http://98.70.77.175',
     'http://0.0.0.0',
 ]
