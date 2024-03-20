@@ -6,7 +6,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     student_id = models.CharField(max_length=15, unique=True)
     profile_pic = models.ImageField(upload_to='profile_pics/Students', null=True, blank=True)
-    mobile = models.CharField(max_length=20, null=False)
+    mobile = models.CharField(max_length=20, null=False, unique=True)
     @property
     def get_name(self):
         return self.user.first_name + ' ' + self.user.last_name
