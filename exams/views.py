@@ -210,7 +210,15 @@ def admin_add_question_view(request):
         if questionForm.is_valid():
             question = questionForm.save(commit=False)
             course = models.Course.objects.get(id=request.POST.get('courseID'))
-            question.course = course
+            image_file = request.FILES.get('picture')
+            if image_file:
+                try:
+                    image_url = upload_image.upload_image_to_telegraph(image_file)
+                    question.picture = image_url
+                except Exception as e:
+                    print(e)
+                    messages.error(request, 'Failed to upload image. Please try again.')
+                    
             question.save()
         else:
             print("form is invalid")
