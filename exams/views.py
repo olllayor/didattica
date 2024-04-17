@@ -15,6 +15,7 @@ from students import models as SMODEL
 from teachers import forms as TFORM
 from students import forms as SFORM
 from django.contrib.auth.models import User
+from exams import upload_image
 
 
 
