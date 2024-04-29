@@ -37,7 +37,7 @@ DEBUG = False
 
 
 # ALLOWED_HOSTS = ["didattica.jprq.app", '127.0.0.1', "demo.jprq.app"]
-ALLOWED_HOSTS = ['98.70.77.175', 'didattica.uz']
+ALLOWED_HOSTS = ['98.70.77.175', 'didattica.uz', '.vercel.app']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
