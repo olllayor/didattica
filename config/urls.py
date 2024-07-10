@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('teachers/', include('teachers.urls')),
     path('students/', include('students.urls')),
+    path('chat/', include('chat.urls')),
     path('',views.home_view,name='home'),
     path('logout', views.logout_teacher, name='logout'),
     path('contactus', views.contactus_view),

@@ -1,0 +1,38 @@
+{% extends "chat/base.html" %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded shadow-md">
+    <h2 class="text-2xl mb-4">Posts</h2>
+    <a href="{% url 'post_create' %}" class="mb-4 inline-block px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">Create New Post</a>
+    <ul class="space-y-4">
+        {% for post in posts %}
+            <li class="bg-gray-50 p-4 rounded shadow-sm">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <strong class="text-lg">{{ post.user.username }}</strong>: {{ post.content }}
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <a href="{% url 'post_like' post.id %}" class="text-teal-600 hover:text-teal-800">
+                            {% if user in post.likes.all %}
+                                Unlike
+                            {% else %}
+                                Like
+                            {% endif %}
+                        </a> ({{ post.likes.count }})
+                        <a href="{% url 'post_reply' post.id %}" class="text-teal-600 hover:text-teal-800">Reply</a> ({{ post.replies.count }})
+                    </div>
+                </div>
+                <ul class="mt-2 space-y-2 pl-4 border-l-2 border-gray-200">
+                    {% for reply in post.replies.all %}
+                        <li>
+                            <strong>{{ reply.user.username }}</strong>: {{ reply.content }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
