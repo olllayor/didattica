@@ -4,11 +4,15 @@
 *.pyc
 __pycache__
 db.sqlite3
+staticfiles
+.venv
+.vscode
+.idea
 media
 .env
 # Backup files # 
 *.bak 
-
+database
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml

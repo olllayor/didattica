@@ -116,6 +116,8 @@ def teacher_add_question_view(request):
                         messages.error(request, 'Failed to upload image. Please try again.')
                         
                 question.save()
+                if 'save_and_continue' in request.POST:
+                    return redirect('add_question')
                 return HttpResponseRedirect('/teachers/teacher-view-question')
             except QMODEL.Course.DoesNotExist:
                 questionForm.add_error('courseID', 'The selected course does not exist.')

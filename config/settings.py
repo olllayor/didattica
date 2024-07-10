@@ -33,11 +33,11 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-$%e5_12d&f)u9x&k18p6m!l*mrl#sb51)3$ms+n#usd9c7$wh('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 # ALLOWED_HOSTS = ["didattica.jprq.app", '127.0.0.1', "demo.jprq.app"]
-ALLOWED_HOSTS = ['98.70.77.175', 'didattica.uz', '.vercel.app']
+ALLOWED_HOSTS = ['98.70.77.175', 'didattica.uz', '.vercel.app', '127.0.0.1', 'localhost', '.jprq.app']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
@@ -47,6 +47,9 @@ CSRF_TRUSTED_ORIGINS = [
     'http://didattica.uz',
     'http://www.didattica.uz',
     'http://98.70.77.175',
+    'https://localhost',
+    'htpp://127.0.0.1',
+    'https://demo.jprq.app',
 ]
 
 CSRF_COOKIE_SECURE = True
@@ -104,17 +107,23 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres.fclnvhgqfitacxpxcmyg',
+#         'PASSWORD': 'YTP%GV8LuZXY2w$',
+#         'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
+#         'PORT': '5432',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.fclnvhgqfitacxpxcmyg',
-        'PASSWORD': 'YTP%GV8LuZXY2w$',
-        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'database', # This is where you put the name of the db file.
+                 # If one doesn't exist, it will be created at migration time.
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
