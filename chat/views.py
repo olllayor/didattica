@@ -1,7 +1,6 @@
-# chat/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Like, Reply
+from .models import Post, Reply
 from .forms import PostForm, ReplyForm
 
 @login_required
@@ -23,16 +22,9 @@ def post_create(request):
     return render(request, 'chat/post_create.html', {'form': form})
 
 @login_required
-def post_like(request, post_id):
+def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    like, created = Like.objects.get_or_create(user=request.user, post=post)
-    if not created:
-        like.delete()
-    return redirect('post_list')
-
-@login_required
-def post_reply(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    replies = post.replies.all()
     if request.method == 'POST':
         form = ReplyForm(request.POST)
         if form.is_valid():
@@ -40,7 +32,22 @@ def post_reply(request, post_id):
             reply.user = request.user
             reply.post = post
             reply.save()
-            return redirect('post_list')
+            return redirect('post_detail', post_id=post_id)
     else:
         form = ReplyForm()
-    return render(request, 'chat/post_reply.html', {'form': form, 'post': post})
+    return render(request, 'chat/post_detail.html', {'post': post, 'replies': replies, 'form': form})
+
+@login_required
+def like_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    # post.likes.add(request.user)
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return redirect('post_list')
+@login_required
+def replied_tweets(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    replies = post.replies.all()
+    return render(request, 'chat/replied_tweets.html', {'post': post, 'replies': replies})
