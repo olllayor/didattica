@@ -51,11 +51,13 @@
     <div class="w-3/4 p-4">
 
         <!-- Tweet Box -->
-        <div class="bg-white p-4 rounded-lg shadow-lg mb-6">
-            <form method="POST" action="{% url 'post_create' %}">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h1 class="text-2xl font-bold mb-4">Create Post</h1>
+            <form id="post-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <textarea name="content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What's happening?"></textarea>
-                <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Tweet</button>
+                <textarea name="content" id="tweet-content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What's happening?"></textarea>
+                <input type="file" name="picture" id="image-upload" class="w-full p-2 border rounded-lg mt-2">
+                <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Post</button>
             </form>
         </div>
 
@@ -73,6 +75,9 @@
                     </div>
                 </div>
                 <p class="text-gray-700">{{ post.content }}</p>
+                {% if post.picture %}
+                <img src="{{ post.picture }}" alt="Image" class="mt-2 rounded-lg" />
+                {% endif %}
                 <div class="mt-2 flex space-x-4">
                     <button class="like-button action-button text-gray-500 hover:text-red-500 focus:outline-none {% if user in post.likes.all %}liked{% endif %}" data-post-id="{{ post.id }}" data-likes-count="{{ post.total_likes }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -104,7 +109,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const likeButtons = document.querySelectorAll('.like-button');
-    
+
     likeButtons.forEach(button => {
         button.addEventListener('click', function() {
             const postId = this.dataset.postId;
@@ -113,10 +118,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Toggle liked state
             this.classList.toggle('liked');
-            
+
             // Add animation class
             this.classList.add('animating');
-            
+
             // Remove animation class after animation completes
             setTimeout(() => {
                 this.classList.remove('animating');
@@ -128,35 +133,27 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 likesCount--;
             }
+
             likesCountElement.textContent = likesCount;
 
-            // Send AJAX request to update like status
+            // Send AJAX request to like/unlike the post
             fetch(`/like-post/${postId}/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                likesCountElement.textContent = data.total_likes;
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
     });
-
-    // Function to get CSRF token
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 });
 </script>
 
