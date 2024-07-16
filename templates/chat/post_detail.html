@@ -16,6 +16,53 @@
         .original-post {
             border-bottom: 2px solid #e5e7eb;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content, #caption {
+            animation-name: zoom;
+            animation-duration: 0.6s;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0)}
+            to {transform: scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -34,6 +81,9 @@
             </div>
         </div>
         <p class="text-gray-700">{{ post.content }}</p>
+        {% if post.picture %}
+            <img src="{{ post.picture }}" alt="Image" class="mt-2 rounded-lg cursor-pointer" onclick="openModal('{{ post.picture }}')" />
+        {% endif %}
         <div class="mt-2 flex space-x-4">
             <button class="like-button action-button text-gray-500 hover:text-red-500 focus:outline-none {% if user in post.likes.all %}liked{% endif %}" data-post-id="{{ post.id }}" data-likes-count="{{ post.total_likes }}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -72,7 +122,7 @@
         <div class="bg-white p-4 rounded-lg shadow-lg">
             <div class="flex items-center mb-2">
                 <div class="mr-2">
-                    <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
+                    <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full cursor-pointer">
                 </div>
                 <div>
                     <h2 class="text-lg font-bold">{{ reply.user.username }}</h2>
@@ -80,6 +130,9 @@
                 </div>
             </div>
             <p class="text-gray-700">{{ reply.content }}</p>
+            {% if reply.picture %}
+                <img src="{{ reply.picture }}" alt="Image" class="h-auto max-w-lg rounded-lg cursor-pointer" onclick="openModal('{{ reply.picture }}')" />
+            {% endif %}
         </div>
         {% empty %}
         <p>No replies yet.</p>
@@ -87,6 +140,26 @@
     </div>
 
 </div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="img01">
+</div>
+
+<script>
+    function openModal(src) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
 
 </body>
 </html>

@@ -4,18 +4,16 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from .models import Post, Reply
+from .models import Post, Reply, Hashtag
 from .forms import PostForm, ReplyForm
 from .upload_image import upload_image_to_telegraph
+import re
 
 @login_required
 def post_list(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
-        print('Form data:', request.POST)
-        print('Form files:', request.FILES)
         if form.is_valid():
-            print('Form is valid')
             post = form.save(commit=False)
             post.user = request.user
             image_file = request.FILES.get('picture')
@@ -26,6 +24,15 @@ def post_list(request):
                 except Exception as e:
                     print('Image upload failed:', e)
                     messages.error(request, 'Failed to upload image. Please try again.')
+
+            post.save()
+
+            # Extract hashtags from the post content
+            hashtags = re.findall(r'#(\w+)', post.content)
+            for tag in hashtags:
+                hashtag, created = Hashtag.objects.get_or_create(name=tag)
+                post.hashtags.add(hashtag)
+
             post.save()
             return redirect('post_list')
         else:
@@ -65,3 +72,9 @@ def replied_tweets(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     replies = post.replies.all()
     return render(request, 'chat/replied_tweets.html', {'post': post, 'replies': replies})
+
+@login_required
+def hashtag_posts(request, hashtag_name):
+    hashtag = get_object_or_404(Hashtag, name=hashtag_name)
+    posts = hashtag.posts.all().order_by('-created_at')
+    return render(request, 'chat/hashtag_posts.html', {'posts': posts, 'hashtag': hashtag})
