@@ -59,10 +59,11 @@
     <!-- Reply Box -->
     <div class="reply-box bg-white p-6 rounded-lg shadow-lg mb-6">
         <h3 class="text-xl font-semibold mb-4">Post your reply</h3>
-        <form method="POST" action="">
-            {% csrf_token %}
-            <textarea name="content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Tweet your reply"></textarea>
-            <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Reply</button>
+        <form id="post-form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <textarea name="content" id="tweet-content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What's happening?"></textarea>
+                <input type="file" name="picture" id="image-upload" class="w-fit p-2 border rounded-lg mt-2">
+                <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Post</button>
         </form>
     </div>
 
@@ -80,8 +81,12 @@
                     <p class="text-gray-500 text-sm">{{ reply.created_at }}</p>
                 </div>
             </div>
+            
             <p class="text-gray-700">{{ reply.content }}</p>
         </div>
+            {% if post.picture %}
+                <img src="{{ post.picture }}" alt="Image" class="h-auto max-w-lg rounded-lg cursor-pointer" onclick="openModal('{{ post.picture }}')"  />
+                {% endif %}
         {% empty %}
         <p>No replies yet.</p>
         {% endfor %}

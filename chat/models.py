@@ -27,6 +27,8 @@ class Reply(models.Model):
     post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
+    picture = models.URLField(max_length=1024, blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

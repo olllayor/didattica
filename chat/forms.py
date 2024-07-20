@@ -9,4 +9,4 @@ class PostForm(forms.ModelForm):
 class ReplyForm(forms.ModelForm):
     class Meta:
         model = Reply
-        fields = ['content']
+        fields = ['content', 'picture']

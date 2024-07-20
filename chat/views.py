@@ -47,11 +47,20 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     replies = post.replies.all()
     if request.method == 'POST':
-        form = ReplyForm(request.POST)
+        form = ReplyForm(request.POST, request.FILES)
         if form.is_valid():
             reply = form.save(commit=False)
             reply.user = request.user
             reply.post = post
+            image_file = request.FILES.get('picture1')
+            if image_file:
+                try:
+                    image_url = upload_image_to_telegraph(image_file)
+                    # print("Image URL:", image_url)  # Debugging line
+                    reply.picture = image_url
+                except Exception as e:
+                    print('Image upload failed:', e)
+                    messages.error(request, 'Failed to upload image. Please try again.')
             reply.save()
             return redirect('post_detail', post_id=post_id)
     else:
