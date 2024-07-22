@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-    {% load static %}
     <style>
-        .reply-box {
-            background-color: #f9fafb;
-        }
-        .reply-header {
-            border-bottom: 2px solid #e5e7eb;
-        }
-        .original-post {
-            border-bottom: 2px solid #e5e7eb;
-        }
         .modal {
             display: none;
             position: fixed;
@@ -29,24 +20,20 @@
             background-color: rgb(0,0,0);
             background-color: rgba(0,0,0,0.9);
         }
-
         .modal-content {
             margin: auto;
             display: block;
             width: 80%;
             max-width: 700px;
         }
-
         .modal-content, #caption {
             animation-name: zoom;
             animation-duration: 0.6s;
         }
-
         @keyframes zoom {
             from {transform: scale(0)}
             to {transform: scale(1)}
         }
-
         .close {
             position: absolute;
             top: 15px;
@@ -56,105 +43,136 @@
             font-weight: bold;
             transition: 0.3s;
         }
-
         .close:hover,
         .close:focus {
             color: #bbb;
             text-decoration: none;
             cursor: pointer;
         }
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .like-button.liked svg {
+            fill: #e53e3e;
+            color: #e53e3e;
+        }
+        .like-button.animating svg {
+            animation: likeAnimation 0.4s ease-in-out;
+        }
+        .action-button {
+            display: flex;
+            align-items: center;
+        }
+        .action-button svg {
+            margin-right: 0.25rem;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                bottom: 0;
+                transition: left 0.3s ease-in-out;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .modal-content {
+                width: 90%;
+                max-width: 90%;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
-<div class="flex">
+<div class="flex flex-col md:flex-row">
+    <!-- Mobile Hamburger Button -->
+    <button id="sidebar-toggle" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
 
-    <!-- Left Menu (Sidebar) -->
-    {% include "chat/sidebar.html" %}
-
-<div class="container mx-auto p-4">
-
-    <!-- Post Detail -->
-    <div class="original-post bg-white p-6 rounded-lg shadow-lg mb-6">
-        <div class="flex items-center mb-2">
-            <div class="mr-2">
-                <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
-            </div>
-            <div>
-                <h2 class="text-lg font-bold">{{ post.user.username }}</h2>
-                <p class="text-gray-500 text-sm">{{ post.created_at }}</p>
-            </div>
-        </div>
-        <p class="text-gray-700">{{ post.content }}</p>
-        {% if post.picture %}
-            <img src="{{ post.picture }}" alt="Image" class="mt-2 rounded-lg cursor-pointer" onclick="openModal('{{ post.picture }}')" />
-        {% endif %}
-        <div class="mt-2 flex space-x-4">
-            <button class="like-button action-button text-gray-500 hover:text-red-500 focus:outline-none {% if user in post.likes.all %}liked{% endif %}" data-post-id="{{ post.id }}" data-likes-count="{{ post.total_likes }}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                </svg>
-                <span class="likes-count text-sm">{{ post.total_likes }}</span>
-            </button>
-            <a href="{% url 'post_detail' post.id %}" class="action-button text-gray-500 hover:text-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
-                </svg>
-                <span class="text-sm">{{ post.replies_count }}</span>
-            </a>
-            <button class="action-button text-gray-500 hover:text-green-500 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
-                </svg>
-            </button>
-        </div>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar w-full md:w-1/4 bg-white shadow-lg md:relative absolute inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition duration-200 ease-in-out">
+        {% include "chat/sidebar.html" %}
     </div>
 
-    <!-- Reply Box -->
-    <div class="reply-box bg-white p-6 rounded-lg shadow-lg mb-6">
-        <h3 class="text-xl font-semibold mb-4">Post your reply</h3>
-        <form id="post-form" method="POST" enctype="multipart/form-data">
+    <!-- Main Content Area -->
+    <div class="w-full md:w-3/4 p-4">
+        <!-- Post Detail -->
+        <div class="bg-white p-6 rounded-lg shadow-xl mb-6">
+            <div class="flex items-center mb-4">
+                <div class="mr-2">
+                    <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">{{ post.user.username }}</h2>
+                    <p class="text-gray-500 text-sm">{{ post.created_at }}</p>
+                </div>
+            </div>
+            <p class="text-gray-700">{{ post.content }}</p>
+            {% if post.picture %}
+            <img src="{{ post.picture }}" alt="Image" class="h-auto max-w-full rounded-lg cursor-pointer" onclick="openModal('{{ post.picture }}')" />
+            {% endif %}
+            <div class="mt-2 flex space-x-4">
+                <button class="like-button action-button text-gray-500 hover:text-red-500 focus:outline-none {% if user in post.likes.all %}liked{% endif %}" data-post-id="{{ post.id }}" data-likes-count="{{ post.total_likes }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                    </svg>
+                    <span class="likes-count text-sm">{{ post.total_likes }}</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Reply Box -->
+        <div class="reply-box bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h3 class="text-xl font-semibold mb-4">Post your reply</h3>
+            <form id="post-form" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <textarea name="content" id="tweet-content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What's happening?"></textarea>
                 <input type="file" name="picture1" id="image-upload" class="w-fit p-2 border rounded-lg mt-2">
                 <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Post</button>
-        </form>
-    </div>
-
-    <!-- Replies -->
-    <div class="space-y-6">
-        <h3 class="reply-header text-xl font-semibold mb-4">Replies</h3>
-        {% for reply in replies %}
-        <div class="bg-white p-4 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="mr-2">
-                    <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full cursor-pointer">
-                </div>
-                <div>
-                    <h2 class="text-lg font-bold">{{ reply.user.username }}</h2>
-                    <p class="text-gray-500 text-sm">{{ reply.created_at }}</p>
-                </div>
-            </div>
-            <p class="text-gray-700">{{ reply.content }}</p>
-            {% if reply.picture %}
-                <p>{{ reply.picture }}</p> <!-- Debugging line -->
-                <img src="{{ reply.picture }}" alt="Image" class="h-auto max-w-lg rounded-lg cursor-pointer" onclick="openModal('{{ reply.picture }}')" />
-            {% endif %}
-
+            </form>
         </div>
-        {% empty %}
-        <p>No replies yet.</p>
-        {% endfor %}
+
+        <!-- Replies -->
+        <div class="space-y-6">
+            <h3 class="reply-header text-xl font-semibold mb-4">Replies</h3>
+            {% for reply in replies %}
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <div class="flex items-center mb-2">
+                    <div class="mr-2">
+                        <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">{{ reply.user.username }}</h2>
+                        <p class="text-gray-500 text-sm">{{ reply.created_at }}</p>
+                    </div>
+                </div>
+                <p class="text-gray-700">{{ reply.content }}</p>
+                {% if reply.picture %}
+                <img src="{{ reply.picture }}" alt="Image" class="h-auto max-w-full rounded-lg cursor-pointer" onclick="openModal('{{ reply.picture }}')" />
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Modal for images -->
+        <div id="myModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="img01">
+        </div>
     </div>
-
 </div>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="img01">
-</div>
-
 <script>
+    document.getElementById("sidebar-toggle").addEventListener("click", function() {
+        var sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("open");
+    });
+
     function openModal(src) {
         var modal = document.getElementById("myModal");
         var modalImg = document.getElementById("img01");
@@ -167,6 +185,5 @@
         modal.style.display = "none";
     }
 </script>
-
 </body>
 </html>

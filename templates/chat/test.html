@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Detail</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .like-button {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .like-button:hover {
+            transform: scale(1.2);
+        }
+
+        .sidebar {
+            width: 250px;
+        }
+
+        .sidebar a {
+            padding: 10px 20px;
+            display: block;
+            color: #1a202c;
+        }
+
+        .sidebar a:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex">
+    <!-- Sidebar -->
+    <div class="sidebar bg-white h-screen shadow-lg fixed">
+        <div class="p-4 font-bold text-xl">MyApp</div>
+        <nav class="mt-4">
+            <a href="#" class="block hover:bg-gray-200">Home</a>
+            <a href="#" class="block hover:bg-gray-200">Explore</a>
+            <a href="#" class="block hover:bg-gray-200">Notifications</a>
+            <a href="#" class="block hover:bg-gray-200">Messages</a>
+            <a href="#" class="block hover:bg-gray-200">Profile</a>
+            <a href="#" class="block hover:bg-gray-200">More</a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-64 p-6">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h1 class="text-2xl font-semibold mb-4">What is happening?!</h1>
+            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                <textarea class="w-full p-2 bg-white rounded-lg shadow-sm" rows="3" placeholder="Share your thoughts..."></textarea>
+                <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Post</button>
+            </div>
+            <!-- Posts -->
+            <div class="space-y-4">
+                <!-- Post -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="font-semibold text-lg">PL Bompard</h2>
+                            <p class="text-gray-600">@PLBompard · 11h</p>
+                        </div>
+                        <div class="text-gray-600">
+                            <button class="focus:outline-none">...</button>
+                        </div>
+                    </div>
+                    <p class="mt-2">Drop your X profile I'll give you 1 tip to get more followers</p>
+                    <div class="flex mt-4 space-x-4 text-gray-600">
+                        <button class="focus:outline-none">50 Comments</button>
+                        <button class="focus:outline-none">14 Retweets</button>
+                        <button class="like-button focus:outline-none">2.4K Likes</button>
+                        <button class="focus:outline-none">Share</button>
+                    </div>
+                </div>
+                <!-- Add more posts as needed -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
