@@ -87,3 +87,8 @@ def hashtag_posts(request, hashtag_name):
     hashtag = get_object_or_404(Hashtag, name=hashtag_name)
     posts = hashtag.posts.all().order_by('-created_at')
     return render(request, 'chat/hashtag_posts.html', {'posts': posts, 'hashtag': hashtag})
+
+
+@login_required
+def api_keys(request):
+    return render(request, 'chat/api_keys.html')

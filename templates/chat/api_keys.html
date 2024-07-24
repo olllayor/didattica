@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings - API Keys</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="flex">
+        <!-- Left Menu (Sidebar) -->
+        {% include 'chat/sidebar.html' %}
+
+        <!-- Main Content Area -->
+        <div class="ml-64 w-full p-4">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">API Keys</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="openai-api-key">OpenAI</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="openai-api-key" type="text" placeholder="Enter OpenAI API Key">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="anthropic-api-key">Anthropic</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="anthropic-api-key" type="text" placeholder="Enter Anthropic API Key">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="google-gemini-api-key">Google Gemini</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="google-gemini-api-key" type="text" placeholder="Enter Google Gemini API Key">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="mistral-api-key">Mistral</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="mistral-api-key" type="text" placeholder="Enter Mistral API Key">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="perplexity-api-key">Perplexity</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="perplexity-api-key" type="text" placeholder="Enter Perplexity API Key">
+                </div>
+                <div class="flex justify-end">
+                    <button class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg mr-2">Cancel</button>
+                    <button class="bg-blue-500 text-white py-2 px-4 rounded-lg">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
