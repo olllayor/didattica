@@ -21,8 +21,11 @@ response = client.chat.completions.create(
   stream=True,
   max_tokens=300,
 )
-for chunk in response:
-    if chunk.choices[0].delta.content is not None:
-        print(chunk.choices[0].delta.content, end="")
+def process_stream(response):
+    content = ""
+    for chunk in response:
+        if chunk.choices[0].delta.content is not None:
+            content += chunk.choices[0].delta.content
+    return content
 
-
+# process_stream(response)

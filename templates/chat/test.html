@@ -1,170 +1,92 @@
 {% load static %}
-{% load custom_filters %}
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Detail</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #ffffff; color: #000; }
-        .tweet-box { background-color: #fcfcfc; }
-        .tweet { border-color: #eaeaea; }
-        .verified-badge { color: #1d9bf0; }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 120px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 100%;
-            max-width: 800px;
-        }
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .close:hover, .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body class="bg-white text-black">
-    <div class="flex min-h-screen">
-        {% include 'chat/sidebar.html' %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Settings - API Keys</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-900">
+    <div class="flex">
+      <!-- Left Menu (Sidebar) -->
+      {% include 'chat/sidebar.html' %}
 
-        <main class="flex-grow border-x border-gray-200">
-            <div class="max-w-2xl mx-auto">
-                <!-- Original Post -->
-                <div class="p-4 border-b border-gray-200">
-                    <div class="flex">
-                        <img src="{% static 'images/default_avatar.png' %}" alt="{{ post.user.username }}" class="w-12 h-12 rounded-full mr-4">
-                        <div class="flex-grow">
-                            <div class="flex items-center">
-                                <span class="font-bold mr-1">{{ post.user.first_name }}</span>
-                                {% if post.user.is_verified %}
-                                <svg class="w-4 h-4 verified-badge" fill="currentColor" viewBox="0 0 24 24"><path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"></path></svg>
-                                {% endif %}
-                                <span class="text-gray-500 ml-1">@{{ post.user.username }} · {{ post.created_at|timesince }}</span>
-                            </div>
-                            <p class="mt-2 text-s font-bolder">
-                                {% for word in post.content.split %}
-                                    {% if word|startswith:'#' %}
-                                        <a href="{% url 'hashtag_posts' word|without_first_char %}" class="text-blue-400 hover:underline">{{ word }}</a>
-                                    {% else %}
-                                        {{ word }}
-                                    {% endif %}
-                                {% endfor %}
-                            </p>
-                            {% if post.picture %}
-                            <img src="{{ post.picture }}" alt="Post image" class="mt-3 rounded-2xl max-h-96 w-full object-cover cursor-pointer" onclick="openModal('{{ post.picture }}')">
-                            {% endif %}
-                            <div class="flex justify-between mt-3 text-gray-500">
-                                <button class="like-button flex items-center space-x-2 hover:text-blue-400 {% if user in post.likes.all %}text-blue-400{% endif %}" data-post-id="{{ post.id }}">
-                                    <svg class="w-5 h-5" fill="{% if user in post.likes.all %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                    <span class="likes-count">{{ post.total_likes }}</span>
-                                </button>
-                                <button class="flex items-center space-x-2 hover:text-blue-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                    <span>{{ post.replies_count }}</span>
-                                </button>
-                                <button class="flex items-center space-x-2 hover:text-blue-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Reply Box -->
-                <div class="p-4 border-b border-gray-200">
-                    <div class="flex">
-                        <img src="{% static 'images/default_avatar.png' %}" alt="Your Avatar" class="w-12 h-12 rounded-full mr-4">
-                        <div class="flex-grow">
-                            <form id="post-form" method="POST" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <textarea name="content" class="w-full bg-transparent text-black placeholder-gray-500 text-xl resize-none outline-none" rows="2" placeholder="Post your reply"></textarea>
-                                <div class="flex justify-between items-center">
-                                    <div class="flex space-x-4 text-blue-400">
-                                        <input type="file" name="picture1" id="image-upload" class="hidden">
-                                        <label for="image-upload" class="cursor-pointer">
-                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path></svg>
-                                        </label>
-                                    </div>
-                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold">Post</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Replies -->
-                {% for reply in replies %}
-                <div class="p-4 border-b border-gray-200">
-                    <div class="flex">
-                        <img src="{% static 'images/default_avatar.png' %}" alt="{{ reply.user.username }}" class="w-12 h-12 rounded-full mr-4">
-                        <div class="flex-grow">
-                            <div class="flex items-center">
-                                <span class="font-bold mr-1">{{ reply.user.first_name }}</span>
-                                <span class="text-gray-500 ml-1">@{{ reply.user.username }} · {{ reply.created_at|timesince }}</span>
-                            </div>
-                            <p class="mt-2 text-s">{{ reply.content }}</p>
-                            {% if reply.picture %}
-                            <img src="{{ reply.picture }}" alt="Reply image" class="mt-3 rounded-2xl max-h-96 w-full object-cover cursor-pointer" onclick="openModal('{{ reply.picture }}')">
-                            {% endif %}
-                            <div class="flex justify-between mt-3 text-gray-500">
-                                <button class="like-button flex items-center space-x-2 hover:text-blue-400" data-post-id="{{ reply.id }}">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                    <span class="likes-count">0</span>
-                                </button>
-                                <button class="flex items-center space-x-2 hover:text-blue-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+      <!-- Main Content Area -->
+      <div class="ml-64 w-full p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          {% if messages %}
+          <div class="mb-4" id="message-container">
+            {% for message in messages %}
+            <div
+              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <span class="block sm:inline">{{ message }}</span>
             </div>
-        </main>
-    </div>
+            {% endfor %}
+          </div>
+          {% endif %}
 
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="img01">
+          <h2 class="text-2xl font-bold mb-4">API Keys</h2>
+          <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-4">
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2"
+                for="{{ field.id_for_label }}"
+                >{{ field.label }}</label
+              >
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="{{ field.id_for_label }}"
+                type="password"
+                placeholder="Enter {{ field.label }} API Key"
+                name="{{ field.name }}"
+                value="{{ field.value|default:'' }}"
+              />
+            </div>
+            {% endfor %}
+            <div class="flex justify-end">
+              <button
+                type="button"
+                class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg">
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-
     <script>
-        function openModal(src) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementById("img01");
-            modal.style.display = "block";
-            modalImg.src = src;
-        }
+      document.addEventListener('DOMContentLoaded', function() {
+          var apiKeyInputs = document.querySelectorAll('input[type="password"]');
 
-        function closeModal() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        }
+          apiKeyInputs.forEach(function(input) {
+              input.addEventListener('focus', function() {
+                  this.type = 'text';
+              });
+
+              input.addEventListener('blur', function() {
+                  this.type = 'password';
+              });
+          });
+
+          var messageContainer = document.getElementById('message-container');
+          if (messageContainer) {
+              setTimeout(function() {
+                  messageContainer.style.display = 'none';
+              }, 3000); // 3 seconds
+          }
+      });
     </script>
-</body>
+  </body>
 </html>

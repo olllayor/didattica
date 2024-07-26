@@ -1,47 +1,115 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Settings - API Keys</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 text-gray-900">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-900">
     <div class="flex">
-        <!-- Left Menu (Sidebar) -->
-        {% include 'chat/sidebar.html' %}
+      <!-- Left Menu (Sidebar) -->
+      {% include 'chat/sidebar.html' %}
 
-        <!-- Main Content Area -->
-        <div class="ml-64 w-full p-4">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-bold mb-4">API Keys</h2>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="openai-api-key">OpenAI</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="openai-api-key" type="text" placeholder="Enter OpenAI API Key">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="anthropic-api-key">Anthropic</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="anthropic-api-key" type="text" placeholder="Enter Anthropic API Key">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="google-gemini-api-key">Google Gemini</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="google-gemini-api-key" type="text" placeholder="Enter Google Gemini API Key">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="mistral-api-key">Mistral</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="mistral-api-key" type="text" placeholder="Enter Mistral API Key">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="perplexity-api-key">Perplexity</label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="perplexity-api-key" type="text" placeholder="Enter Perplexity API Key">
-                </div>
-                <div class="flex justify-end">
-                    <button class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg mr-2">Cancel</button>
-                    <button class="bg-blue-500 text-white py-2 px-4 rounded-lg">Save</button>
-                </div>
+      <!-- Main Content Area -->
+      <div class="ml-64 w-full p-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          {% if messages %}
+          <div class="mb-4" id="message-container">
+            {% for message in messages %}
+            <div
+              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <span class="block sm:inline">{{ message }}</span>
             </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <h2 class="text-2xl font-bold mb-4">API Keys</h2>
+          <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-4">
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2"
+                for="{{ field.id_for_label }}"
+                >{{ field.label }}</label
+              >
+              <div class="relative">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+                  id="{{ field.id_for_label }}"
+                  type="password"
+                  placeholder="Enter {{ field.label }} API Key"
+                  name="{{ field.name }}"
+                  value="{{ field.value|default:'' }}"
+                />
+                <button 
+                  type="button"
+                  class="toggle-visibility absolute inset-y-0 right-0 flex items-center px-2"
+                  data-target="{{ field.id_for_label }}"
+                >
+                  <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+            <div class="flex justify-end">
+              <button
+                type="button"
+                class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg">
+                Save
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</body>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var messageContainer = document.getElementById('message-container');
+          if (messageContainer) {
+              setTimeout(function() {
+                  messageContainer.style.display = 'none';
+              }, 3000); // 3 seconds
+          }
+
+          // Toggle visibility functionality
+          var toggleButtons = document.querySelectorAll('.toggle-visibility');
+          toggleButtons.forEach(function(button) {
+              button.addEventListener('click', function() {
+                  var targetId = this.getAttribute('data-target');
+                  var inputField = document.getElementById(targetId);
+                  if (inputField.type === 'password') {
+                      inputField.type = 'text';
+                      this.innerHTML = `
+                          <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                          </svg>`;
+                  } else {
+                      inputField.type = 'password';
+                      this.innerHTML = `
+                          <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>`;
+                  }
+              });
+          });
+      });
+    </script>
+  </body>
 </html>

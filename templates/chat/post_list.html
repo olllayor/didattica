@@ -4,19 +4,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body { background-color: #ffffff; color: #000; }
-        .tweet-box { background-color: #fcfcfc; }
-        .tweet { border-color: #eaeaea; }
-        .verified-badge { color: #1d9bf0; }
-        .content-wrapper {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
+        <style>
+            body { background-color: #ffffff; color: #000; }
+            .tweet-box { background-color: #fcfcfc; }
+            .tweet { border-color: #eaeaea; }
+            .verified-badge { color: #1d9bf0; }
+            .content-wrapper {
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            @keyframes likeAnimation {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+            .like-animation {
+                animation: likeAnimation 0.3s ease-in-out;
+            }
+            /* Modal styles */
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background-color: rgba(0,0,0,0.9);
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .modal.show {
+                opacity: 1;
+            }
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: auto;
+                height: auto;
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 14px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+                opacity: 0;
+                transform: scale(0.8);
+                transition: all 0.3s ease;
+            }
+            .modal.show .modal-content {
+                opacity: 1;
+                transform: scale(1);
+            }
+            .modal-close {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                color: #fff;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1001;
+                width: 30px;
+                height: 30px;
+                background-color: rgba(0,0,0,0.4);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s ease;
+            }
+            .modal-close:hover {
+                background-color: rgba(0,0,0,0.6);
+            }
+            .modal-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #fff;
+                font-size: 36px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 1001;
+                width: 40px;
+                height: 40px;
+                background-color: rgba(0,0,0,0.4);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s ease;
+            }
+            .modal-nav:hover {
+                background-color: rgba(0,0,0,0.6);
+            }
+            .modal-prev {
+                left: 20px;
+            }
+            .modal-next {
+                right: 20px;
+            }
     </style>
 </head>
 <body class="bg-white text-black">
@@ -32,7 +123,7 @@
                         <div class="flex-grow">
                             <form id="post-form" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <textarea name="content" class="w-full bg-transparent text-black placeholder-gray-500 mt-3 text-xl resize-none outline-none" rows="2" placeholder="Post your reply"></textarea>
+                                <textarea name="content" class="w-full bg-transparent text-black placeholder-gray-500 mt-3 text-xl resize-none outline-none" rows="2" placeholder="What's happening"></textarea>
                                 <div class="flex justify-between items-center">
                                     <div class="flex space-x-4 text-blue-400">
                                         <input type="file" name="picture" id="image-upload" class="hidden">
@@ -40,7 +131,7 @@
                                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path></svg>
                                         </label>
                                     </div>
-                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold">Post</button>
+                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold hover:text-blue-500">Post</button>
                                 </div>
                             </form>
                         </div>
@@ -51,6 +142,7 @@
                 {% for post in posts %}
                 <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition duration-150 ease-in-out">
                     <div class="flex">
+                        <a href="{% url 'post_detail' post.id %}" class="block mt-2">
                         <div class="flex-shrink-0 mr-4">
                             <img src="{% static 'images/default_avatar.png' %}" alt="{{ post.user.username }}" class="w-12 h-12 rounded-full">
                         </div>
@@ -62,38 +154,45 @@
                                     {% endif %}
                                     <p class="text-sm text-gray-500 truncate ml-2">@{{ post.user.username }} · {{ post.created_at|timesince }}</p>
                                 </div>
-                                <p class="mt-2 text-s font-bolder break-words">
-                                    {% for word in post.content.split %}
-                                        {% if word|startswith:'#' %}
-                                            <a href="{% url 'hashtag_posts' word|without_first_char %}" class="text-blue-400 hover:underline">{{ word }}</a>
-                                        {% else %}
-                                            {{ word }}
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
+                                <a href="{% url 'post_detail' post.id %}" class="block mt-2">
+                                                <p class="text-s font-bolder break-words">
+                                                    {% for word in post.content.split %}
+                                                        {% if word|startswith:'#' %}
+                                                            <span class="text-blue-400 hover:underline">{{ word }}</span>
+                                                        {% else %}
+                                                            {{ word }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            </a>
                                 {% if post.picture %}
-                                <img src="{{ post.picture }}" alt="Post image" class="mt-3 rounded-2xl max-h-96 w-full object-cover">
+                                <img src="{{ post.picture }}" alt="Post image" class="mt-3 rounded-2xl max-h-96 w-full object-cover cursor-pointer" onclick="openModal('{{ post.picture }}')">
                                 {% endif %}
                                 <div class="flex justify-between mt-3 text-gray-500">
-                                    <button class="flex items-center space-x-2 hover:text-blue-400">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                                        <span>{{ post.replies_count }}</span>
+                                    <button class="flex items-center space-x-2 hover:text-blue-400"
+                                            onclick="window.location.href = '{% url 'post_detail' post.id %}'">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                    </svg>
+                                    <span>{{ post.replies_count }}</span>
                                     </button>
-                                    <button class="flex items-center space-x-2 hover:text-green-400">
+
+                                    {% comment %} <button class="flex items-center space-x-2 hover:text-green-400">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
-                                        <span>0</span>
+                                        <span>0</span> {% endcomment %}
                                     </button>
-                                    <button class="flex items-center space-x-2 hover:text-red-400 {% if user in post.likes.all %}text-red-400{% endif %}" data-post-id="{{ post.id }}">
+                                    <button class="like-button flex items-center space-x-2 hover:text-red-400 {% if user in post.likes.all %}text-red-400{% endif %}" data-post-id="{{ post.id }}">
                                         <svg class="w-5 h-5" fill="{% if user in post.likes.all %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                        <span>{{ post.total_likes }}</span>
+                                        <span class="like-count">{{ post.total_likes }}</span>
                                     </button>
+
                                     <button class="flex items-center space-x-2 hover:text-blue-400">
                                         <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                                             <g>
                                                 <path d="M22.772 10.506l-5.618-2.192-2.16-6.5c-.102-.307-.39-.514-.712-.514s-.61.207-.712.513l-2.16 6.5-5.62 2.192c-.287.112-.477.39-.477.7s.19.585.478.698l5.62 2.192 2.16 6.5c.102.306.39.513.712.513s.61-.207.712-.513l2.16-6.5 5.62-2.192c.287-.112.477-.39.477-.7s-.19-.585-.478-.697zm-6.49 2.32c-.208.08-.37.25-.44.46l-1.56 4.695-1.56-4.693c-.07-.21-.23-.38-.438-.462l-4.155-1.62 4.154-1.622c.208-.08.37-.25.44-.462l1.56-4.693 1.56 4.694c.07.212.23.382.438.463l4.155 1.62-4.155 1.622zM6.663 3.812h-1.88V2.05c0-.414-.337-.75-.75-.75s-.75.336-.75.75v1.762H1.5c-.414 0-.75.336-.75.75s.336.75.75.75h1.782v1.762c0 .414.336.75.75.75s.75-.336.75-.75V5.312h1.88c.415 0 .75-.336.75-.75s-.335-.75-.75-.75zm2.535 15.622h-1.1v-1.016c0-.414-.335-.75-.75-.75s-.75.336-.75.75v1.016H5.57c-.414 0-.75.336-.75.75s.336.75.75.75H6.6v1.016c0 .414.335.75.75.75s.75-.336.75-.75v-1.016h1.098c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z">
                                                 </path>
                                             </g>
-                                        </svg>                                    
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -106,23 +205,103 @@
     </div>
 
     <!-- The Modal -->
-    <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="img00">
+    <div id="imageModal" class="modal">
+        <span class="modal-close">&times;</span>
+        <span class="modal-nav modal-prev">&lsaquo;</span>
+        <span class="modal-nav modal-next">&rsaquo;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script>
+        let currentImageIndex = 0;
+        const images = [{% for post in posts %}{% if post.picture %}'{{ post.picture }}',{% endif %}{% endfor %}];
+
         function openModal(src) {
-            var modal = document.getElementById("myModal");
-            var modalImg = document.getElementById("img00");
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
             modal.style.display = "block";
+            setTimeout(() => modal.classList.add('show'), 10);
             modalImg.src = src;
+            currentImageIndex = images.indexOf(src);
         }
 
         function closeModal() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none";
+            const modal = document.getElementById("imageModal");
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = "none", 300);
         }
+
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            if (currentImageIndex < 0) currentImageIndex = images.length - 1;
+            if (currentImageIndex >= images.length) currentImageIndex = 0;
+            document.getElementById("modalImage").src = images[currentImageIndex];
+        }
+
+        // Close modal events
+        document.querySelector('.modal-close').onclick = closeModal;
+        window.onclick = function(event) {
+            const modal = document.getElementById("imageModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Navigation events
+        document.querySelector('.modal-prev').onclick = () => changeImage(-1);
+        document.querySelector('.modal-next').onclick = () => changeImage(1);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById("imageModal").style.display === "block") {
+                if (e.key === "ArrowLeft") changeImage(-1);
+                if (e.key === "ArrowRight") changeImage(1);
+                if (e.key === "Escape") closeModal();
+            }
+        });
+
+    
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const likeButtons = document.querySelectorAll('.like-button');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            likeButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const postId = button.getAttribute('data-post-id');
+
+                    fetch(`/like_post/${postId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const likeCountSpan = button.querySelector('.like-count');
+                        likeCountSpan.textContent = data.total_likes;
+
+                        // Toggle the button style based on whether the user has liked the post
+                        button.classList.toggle('text-red-400', data.liked);
+                        const svgElement = button.querySelector('svg');
+                        svgElement.setAttribute('fill', data.liked ? 'currentColor' : 'none');
+
+                        // Add animation
+                        button.classList.add('like-animation');
+                        button.addEventListener('animationend', () => {
+                            button.classList.remove('like-animation');
+                        }, { once: true });
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+        
     </script>
+
+
 </body>
 </html>

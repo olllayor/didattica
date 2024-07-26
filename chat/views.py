@@ -1,13 +1,16 @@
-import requests
-from django.core.checks import messages
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from .models import Post, Reply, Hashtag
-from .forms import PostForm, ReplyForm
-from .upload_image import upload_image_to_telegraph
+from django.contrib import messages
 import re
+
+from django.contrib.auth.decorators import login_required
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+
+from .forms import APIKeyForm, PostForm, ReplyForm
+from .models import APIKey, Hashtag, Post
+from .upload_image import upload_image_to_telegraph
+
 
 @login_required
 def post_list(request):
@@ -68,13 +71,17 @@ def post_detail(request, post_id):
     return render(request, 'chat/post_detail.html', {'post': post, 'replies': replies, 'form': form})
 
 @login_required
+@require_POST
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.user in post.likes.all():
         post.likes.remove(request.user)
+        liked = False
     else:
         post.likes.add(request.user)
-    return JsonResponse({'total_likes': post.total_likes()})
+        liked = True
+    return JsonResponse({'total_likes': post.total_likes(), 'liked': liked})
+
 
 @login_required
 def replied_tweets(request, post_id):
@@ -91,4 +98,18 @@ def hashtag_posts(request, hashtag_name):
 
 @login_required
 def api_keys(request):
-    return render(request, 'chat/api_keys.html')
+    user = request.user
+    api_key, created = APIKey.objects.get_or_create(user=user)
+    
+    if request.method == 'POST':
+        form = APIKeyForm(request.POST, instance=api_key)
+        if form.is_valid():
+            api_key = form.save(commit=False)
+            api_key.user = user
+            api_key.save()
+            messages.success(request, "API keys saved successfully.")
+            return redirect('api_keys')
+    else:
+        form = APIKeyForm(instance=api_key)
+
+    return render(request, 'chat/api_keys.html', {'form': form})
