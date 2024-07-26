@@ -29,6 +29,7 @@ def post_list(request):
                     messages.error(request, 'Failed to upload image. Please try again.')
 
             post.save()
+            
 
             # Extract hashtags from the post content
             hashtags = re.findall(r'#(\w+)', post.content)
@@ -37,6 +38,7 @@ def post_list(request):
                 post.hashtags.add(hashtag)
 
             post.save()
+            messages.success(request, 'Your post was sent.')
             return redirect('post_list')
         else:
             print('Form is invalid:', form.errors)
