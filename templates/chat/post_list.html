@@ -124,14 +124,22 @@
                             <form id="post-form" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <textarea name="content" class="w-full bg-transparent text-black placeholder-gray-500 mt-3 text-xl resize-none outline-none" rows="2" placeholder="What's happening"></textarea>
-                                <div class="flex justify-between items-center">
+                                <div id="image-preview" class="hidden mt-2 relative">
+                                    <img id="preview-image" src="" alt="Preview" class="max-w-full h-auto rounded-2xl">
+                                    <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between items-center mt-3">
                                     <div class="flex space-x-4 text-blue-400">
-                                        <input type="file" name="picture" id="image-upload" class="hidden">
+                                        <input type="file" name="picture" id="image-upload" class="hidden" accept="image/*">
                                         <label for="image-upload" class="cursor-pointer">
                                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path></svg>
                                         </label>
                                     </div>
-                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold hover:text-blue-500">Post</button>
+                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold hover:bg-blue-500">Post</button>
                                 </div>
                             </form>
                         </div>
@@ -213,6 +221,35 @@
     </div>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageUpload = document.getElementById('image-upload');
+            const imagePreview = document.getElementById('image-preview');
+            const previewImage = document.getElementById('preview-image');
+            const removeImage = document.getElementById('remove-image');
+        
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        
+            removeImage.addEventListener('click', function() {
+                imageUpload.value = '';
+                imagePreview.classList.add('hidden');
+                previewImage.src = '';
+            });
+        });
+
+
+
+
         let currentImageIndex = 0;
         const images = [{% for post in posts %}{% if post.picture %}'{{ post.picture }}',{% endif %}{% endfor %}];
 
