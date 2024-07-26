@@ -1,92 +1,328 @@
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Settings - API Keys</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100 text-gray-900">
-    <div class="flex">
-      <!-- Left Menu (Sidebar) -->
-      {% include 'chat/sidebar.html' %}
+<head>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #ffffff; color: #000; }
+        .tweet-box { background-color: #fcfcfc; }
+        .tweet { border-color: #eaeaea; }
+        .verified-badge { color: #1d9bf0; }
+        .content-wrapper {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .like-animation {
+            animation: likeAnimation 0.3s ease-in-out;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0,0,0,0.9);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            opacity: 1;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        .modal.show .modal-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        .modal-close:hover {
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            font-size: 36px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        .modal-nav:hover {
+            background-color: rgba(0,0,0,0.6);
+        }
+        .modal-prev {
+            left: 20px;
+        }
+        .modal-next {
+            right: 20px;
+        }
+        .message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: #1DA1F2;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        .message-close {
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body class="bg-white text-black">
+    <div class="flex min-h-screen">
+        {% include 'chat/sidebar.html' %}
 
-      <!-- Main Content Area -->
-      <div class="ml-64 w-full p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          {% if messages %}
-          <div class="mb-4" id="message-container">
-            {% for message in messages %}
-            <div
-              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
-              <span class="block sm:inline">{{ message }}</span>
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
+        <main class="flex-grow border-x border-gray-800">
+            <div class="max-w-2xl mx-auto">
 
-          <h2 class="text-2xl font-bold mb-4">API Keys</h2>
-          <form method="POST">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="mb-4">
-              <label
-                class="block text-gray-700 text-sm font-bold mb-2"
-                for="{{ field.id_for_label }}"
-                >{{ field.label }}</label
-              >
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="{{ field.id_for_label }}"
-                type="password"
-                placeholder="Enter {{ field.label }} API Key"
-                name="{{ field.name }}"
-                value="{{ field.value|default:'' }}"
-              />
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="message-box" class="message message-{{ message.tags }}">
+                            {{ message }}
+                            <span class="message-close">x</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Tweet Box -->
+                <div class="p-4 border-b border-gray-200">
+                    <div class="flex">
+                        <img src="{% static 'images/default_avatar.png' %}" alt="Your Avatar" class="w-12 h-12 rounded-full mr-4">
+                        <div class="flex-grow">
+                            <form id="post-form" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <textarea id="tweet-content" name="content" class="w-full bg-transparent text-black placeholder-gray-500 mt-3 text-xl resize-none outline-none" rows="2" placeholder="What's happening"></textarea>
+                                <div id="image-preview" class="hidden mt-2 relative">
+                                    <img id="preview-image" src="" alt="Preview" class="max-w-full h-auto rounded-2xl">
+                                    <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex justify-between items-center mt-3">
+                                    <div class="flex space-x-4 text-blue-400">
+                                        <input type="file" name="picture" id="image-upload" class="hidden" accept="image/*">
+                                        <label for="image-upload" class="cursor-pointer">
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.75 2H4.25C3.01 2 2 3.01 2 4.25v15.5C2 20.99 3.01 22 4.25 22h15.5c1.24 0 2.25-1.01 2.25-2.25V4.25C22 3.01 20.99 2 19.75 2zM4.25 3.5h15.5c.413 0 .75.337.75.75v9.676l-3.858-3.858c-.14-.14-.33-.22-.53-.22h-.003c-.2 0-.393.08-.532.224l-4.317 4.384-1.813-1.806c-.14-.14-.33-.22-.53-.22-.193-.03-.395.08-.535.227L3.5 17.642V4.25c0-.413.337-.75.75-.75zm-.744 16.28l5.418-5.534 6.282 6.254H4.25c-.402 0-.727-.322-.744-.72zm16.244.72h-2.42l-5.007-4.987 3.792-3.85 4.385 4.384v3.703c0 .413-.337.75-.75.75z"></path></svg>
+                                        </label>
+                                    </div>
+                                    <button type="submit" class="px-4 py-2 bg-blue-400 text-white rounded-full font-bold hover:bg-blue-700">Post</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts -->
+                
+                {% for post in posts %}
+                <div class="p-4 border-b border-gray-200 hover:bg-gray-50 transition duration-150 ease-in-out">
+                    <div class="flex">
+                        <a href="{% url 'post_detail' post.id %}" class="block mt-2">
+                            <div class="flex items-start space-x-4">
+                                <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="text-lg font-semibold">{{ post.author.username }}</h3>
+                                        {% if post.author.is_verified %}
+                                            <svg class="verified-badge w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm1.492 16.736l-4.67-4.67 1.323-1.322 3.255 3.255 5.77-5.77 1.322 1.323-7.016 7.016z"></path></svg>
+                                        {% endif %}
+                                    </div>
+                                    <p class="mt-1 text-gray-600">{{ post.content|truncatewords:20 }}</p>
+                                    {% if post.picture %}
+                                    <div class="mt-2">
+                                        <img src="{{ post.picture.url }}" alt="Post Image" class="w-full h-auto rounded-lg">
+                                    </div>
+                                    {% endif %}
+                                    <div class="flex items-center space-x-4 mt-2">
+                                        <button class="like-button" data-post-id="{{ post.id }}">
+                                            <svg class="w-5 h-5 {{ 'like-animation' if post.likes.all else '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13.68a6 6 0 01-3.516 3.516 6 6 0 01-6.732-6.733A6 6 0 0120 13.68zm-4.89-7.73a2 2 0 00-1.232 3.71A6 6 0 0014.67 7.38a2 2 0 00-1.232-3.71 2 2 0 00-1.232 3.71A6 6 0 007.58 7.38a2 2 0 00-1.232-3.71z"></path></svg>
+                                            <span class="text-sm">{{ post.likes_count }}</span>
+                                        </button>
+                                    </div>  
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <div class="flex justify-end">
-              <button
-                type="button"
-                class="bg-gray-300 text-gray-800 py-2 px-4 rounded-lg mr-2"
-              >
-                Cancel
-              </button>
-              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg">
-                Save
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+        </main>
     </div>
+
+    <!-- Modal for Image Preview -->
+    <div id="modal" class="modal">
+        <span class="modal-close">&times;</span>
+        <img id="modal-image" class="modal-content" src="" alt="Modal Image">
+        <a class="modal-nav modal-prev">&#9664;</a>
+        <a class="modal-nav modal-next">&#9654;</a>
+    </div>
+
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          var apiKeyInputs = document.querySelectorAll('input[type="password"]');
+        // JavaScript for handling paste events and image preview
+        document.addEventListener('DOMContentLoaded', () => {
+            const tweetContent = document.getElementById('tweet-content');
+            const imagePreview = document.getElementById('image-preview');
+            const previewImage = document.getElementById('preview-image');
+            const removeImage = document.getElementById('remove-image');
+            const imageUpload = document.getElementById('image-upload');
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalClose = document.querySelector('.modal-close');
+            const modalPrev = document.querySelector('.modal-prev');
+            const modalNext = document.querySelector('.modal-next');
+            let imageUrls = [];
 
-          apiKeyInputs.forEach(function(input) {
-              input.addEventListener('focus', function() {
-                  this.type = 'text';
-              });
+            // Handle paste events
+            tweetContent.addEventListener('paste', (e) => {
+                const items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.startsWith('image/')) {
+                        const blob = items[i].getAsBlob();
+                        const url = URL.createObjectURL(blob);
+                        previewImage.src = url;
+                        imagePreview.classList.remove('hidden');
+                        imageUrls.push(url);
+                    }
+                }
+            });
 
-              input.addEventListener('blur', function() {
-                  this.type = 'password';
-              });
-          });
+            // Handle image file upload
+            imageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    previewImage.src = url;
+                    imagePreview.classList.remove('hidden');
+                    imageUrls.push(url);
+                }
+            });
 
-          var messageContainer = document.getElementById('message-container');
-          if (messageContainer) {
-              setTimeout(function() {
-                  messageContainer.style.display = 'none';
-              }, 3000); // 3 seconds
-          }
-      });
+            // Remove image preview
+            removeImage.addEventListener('click', () => {
+                previewImage.src = '';
+                imagePreview.classList.add('hidden');
+                imageUrls = [];
+            });
+
+            // Modal handling
+            document.querySelectorAll('.like-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Perform like action
+                    const postId = button.getAttribute('data-post-id');
+                    fetch(`/like_post/${postId}/`, { method: 'POST', headers: { 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content') } })
+                        .then(response => {
+                            if (response.ok) {
+                                button.classList.add('like-animation');
+                                setTimeout(() => button.classList.remove('like-animation'), 300);
+                                return response.json();
+                            }
+                            throw new Error('Network response was not ok.');
+                        })
+                        .then(data => {
+                            button.querySelector('span').textContent = data.likes_count;
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+
+            // Open modal with image
+            function openModal(src) {
+                modalImage.src = src;
+                modal.classList.add('show');
+            }
+
+            // Close modal
+            modalClose.addEventListener('click', () => {
+                modal.classList.remove('show');
+            });
+
+            // Modal navigation
+            let currentIndex = 0;
+            function showImage(index) {
+                if (index >= 0 && index < imageUrls.length) {
+                    openModal(imageUrls[index]);
+                    currentIndex = index;
+                }
+            }
+
+            modalPrev.addEventListener('click', () => {
+                showImage(currentIndex - 1);
+            });
+
+            modalNext.addEventListener('click', () => {
+                showImage(currentIndex + 1);
+            });
+
+            // Add event listener to image preview for modal view
+            previewImage.addEventListener('click', () => {
+                openModal(previewImage.src);
+            });
+        });
     </script>
-  </body>
+</body>
 </html>

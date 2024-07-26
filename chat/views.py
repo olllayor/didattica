@@ -115,3 +115,4 @@ def api_keys(request):
         form = APIKeyForm(instance=api_key)
 
     return render(request, 'chat/api_keys.html', {'form': form})
+
