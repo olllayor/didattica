@@ -6,11 +6,61 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-
+import json
 from .forms import APIKeyForm, PostForm, ReplyForm
 from .models import APIKey, Hashtag, Post
 from .upload_image import upload_image_to_telegraph
+from .openai_chat import process_stream, client
 
+
+@login_required
+@require_POST
+def ai_chat(request):
+    data = json.loads(request.body)
+    message = data['message']
+    model = data['model']
+    post_id = data['postId']
+    post_content = data['postContent']
+    post_image = data['postImage']
+
+    api_key = APIKey.objects.get(user=request.user)
+
+    if model == 'openai':
+        if not api_key.openai_api_key:
+            return JsonResponse({'error': 'OpenAI API key not set'}, status=400)
+        
+        client.api_key = api_key.openai_api_key
+        
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4-vision-preview",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant analyzing a social media post."},
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": f"Analyze this post: {post_content}"},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": post_image,
+                                },
+                            } if post_image else {},
+                        ],
+                    },
+                    {"role": "user", "content": message}
+                ],
+                stream=True,
+                temperature=0.0,
+            )
+            
+            ai_response = process_stream(response)
+            return JsonResponse({'response': ai_response})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        # Handle other AI models here
+        return JsonResponse({'error': 'Unsupported AI model'}, status=400)
 
 @login_required
 def post_list(request):

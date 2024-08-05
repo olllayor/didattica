@@ -9,4 +9,5 @@ urlpatterns = [
     path('like_post/<int:post_id>/', views.like_post, name='like_post'),
     path('replied-tweets/<int:post_id>/', views.replied_tweets, name='replied_tweets'),
     path('hashtag/<str:hashtag_name>/', views.hashtag_posts, name='hashtag_posts'),
+    path('ai_chat/', views.ai_chat, name='ai_chat'),
 ]

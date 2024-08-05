@@ -284,7 +284,9 @@
                                         <span class="like-count">{{ post.total_likes }}</span>
                                     </button>
 
-                                    <button class="flex items-center space-x-2 hover:text-blue-400" onclick="showPopup()">                                        <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <!-- In the post_list.html file -->
+                                    <button class="flex items-center space-x-2 hover:text-blue-400" onclick="showPopup('{{ post.id }}', '{{ post.content|escapejs }}', '{{ post.picture|default:'' }}')">
+                                        <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                                             <g>
                                                 <path d="M22.772 10.506l-5.618-2.192-2.16-6.5c-.102-.307-.39-.514-.712-.514s-.61.207-.712.513l-2.16 6.5-5.62 2.192c-.287.112-.477.39-.477.7s.19.585.478.698l5.62 2.192 2.16 6.5c.102.306.39.513.712.513s.61-.207.712-.513l2.16-6.5 5.62-2.192c.287-.112.477-.39.477-.7s-.19-.585-.478-.697zm-6.49 2.32c-.208.08-.37.25-.44.46l-1.56 4.695-1.56-4.693c-.07-.21-.23-.38-.438-.462l-4.155-1.62 4.154-1.622c.208-.08.37-.25.44-.462l1.56-4.693 1.56 4.694c.07.212.23.382.438.463l4.155 1.62-4.155 1.622zM6.663 3.812h-1.88V2.05c0-.414-.337-.75-.75-.75s-.75.336-.75.75v1.762H1.5c-.414 0-.75.336-.75.75s.336.75.75.75h1.782v1.762c0 .414.336.75.75.75s.75-.336.75-.75V5.312h1.88c.415 0 .75-.336.75-.75s-.335-.75-.75-.75zm2.535 15.622h-1.1v-1.016c0-.414-.335-.75-.75-.75s-.75.336-.75.75v1.016H5.57c-.414 0-.75.336-.75.75s.336.75.75.75H6.6v1.016c0 .414.335.75.75.75s.75-.336.75-.75v-1.016h1.098c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z"></path>
                                             </g>
@@ -362,43 +364,7 @@
 
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const likeButtons = document.querySelectorAll('.like-button');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        likeButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
-                const postId = button.getAttribute('data-post-id');
-
-                fetch(`/like_post/${postId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    credentials: 'same-origin'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const likeCountSpan = button.querySelector('.like-count');
-                    likeCountSpan.textContent = data.total_likes;
-
-                    // Toggle the button style based on whether the user has liked the post
-                    button.classList.toggle('text-red-400', data.liked);
-                    const svgElement = button.querySelector('svg');
-                    svgElement.setAttribute('fill', data.liked ? 'currentColor' : 'none');
-
-                    // Add animation
-                    button.classList.add('like-animation');
-                    button.addEventListener('animationend', () => {
-                        button.classList.remove('like-animation');
-                    }, { once: true });
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        });
-    });
+    
     document.addEventListener('DOMContentLoaded', function() {
 const imageUpload = document.getElementById('image-upload');
 const imagePreview = document.getElementById('image-preview');
@@ -444,16 +410,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Update the showPopup function
-function showPopup() {
-    const popup = document.getElementById('popup');
-    popup.classList.add('show');
-}
-
-// Close popup when clicking the close button
-document.getElementById('popup-close').addEventListener('click', function() {
-    document.getElementById('popup').classList.remove('show');
-});
 
 // Handle custom select functionality
 document.addEventListener('DOMContentLoaded', function() {
@@ -480,6 +436,95 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function showPopup(postId, postContent, postImage) {
+    const popup = document.getElementById('popup');
+    popup.classList.add('show');
+    popup.style.transform = 'translateX(0)';
+    
+    // Store the post data in the popup
+    popup.dataset.postId = postId;
+    popup.dataset.postContent = postContent;
+    popup.dataset.postImage = postImage;
+    
+    // Display post content and image
+    const postContentDiv = document.getElementById('post-content');
+    postContentDiv.innerHTML = '';
+    
+    if (postImage) {
+        const img = document.createElement('img');
+        img.src = postImage;
+        img.alt = 'Post image';
+        img.className = 'mb-2 rounded-lg max-w-full h-auto';
+        postContentDiv.appendChild(img);
+    }
+    
+    const content = document.createElement('p');
+    content.textContent = postContent;
+    postContentDiv.appendChild(content);
+    
+    // Clear previous chat messages
+    document.getElementById('chat-container').innerHTML = '';
+    
+    // Add initial AI message
+    displayMessage('ai', 'Hello! I'm here to help you analyze this post. What would you like to know about it?');
+}
+
+function sendMessage() {
+    const userInput = document.getElementById('user-input');
+    const message = userInput.value.trim();
+    if (message) {
+        displayMessage('user', message);
+        
+        // Get the selected AI model
+        const selectedModel = document.querySelector('.custom-select-option.selected').dataset.value;
+        
+        // Get the post data
+        const popup = document.getElementById('popup');
+        const postId = popup.dataset.postId;
+        const postContent = popup.dataset.postContent;
+        const postImage = popup.dataset.postImage;
+        
+        // Send the message to the server
+        fetch('/ai_chat/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                message: message,
+                model: selectedModel,
+                postId: postId,
+                postContent: postContent,
+                postImage: postImage
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                displayMessage('ai', `Error: ${data.error}`);
+            } else {
+                displayMessage('ai', data.response);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            displayMessage('ai', 'Sorry, there was an error processing your request.');
+        });
+        
+        userInput.value = '';
+    }
+}
+
+function displayMessage(sender, message) {
+    const chatContainer = document.getElementById('chat-container');
+    const messageElement = document.createElement('div');
+    messageElement.className = sender === 'user' ? 'mb-2 text-right' : 'mb-2';
+    messageElement.innerHTML = `<span class="inline-block p-2 rounded ${sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}">${message}</span>`;
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
 </script>
 
