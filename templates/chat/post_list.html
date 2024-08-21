@@ -8,10 +8,13 @@
 <head>
     <meta name="csrf-token" content="{{ csrf_token }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Post List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        <style>
+        
             body { background-color: #ffffff; color: #000; }
             .tweet-box { background-color: #fcfcfc; }
             .tweet { border-color: #eaeaea; }
@@ -201,6 +204,19 @@
                 height: 24px;
                 border-radius: 50%;
                 margin-right: 10px;
+                }
+                  
+                  body {
+                    background: #ffffff; /* Adjust background to match your design */
+                  }
+                  
+                  .placement {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    transform: translate(0, 0); /* Adjust placement to fit within the flex container */
+                  }
+                  
             
     </style>
 </head>
@@ -221,7 +237,9 @@
                                 <div id="image-preview" class="hidden mt-2 relative">
                                     <img id="preview-image" src="" alt="Preview" class="max-w-full h-auto rounded-2xl">
                                     <button type="button" id="remove-image" class="absolute top-2 right-2 bg-gray-800 text-white rounded-full p-1">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
                                     </button>
                                 </div>
                                 <div class="flex justify-between items-center mt-3">
@@ -270,27 +288,45 @@
                                         <img src="{{ post.picture }}" alt="Post image" class="mt-3 rounded-2xl max-w-full max-h-96 object-cover cursor-pointer" onclick="openModal('{{ post.picture }}')">
                                     </div>
                                 {% endif %}
+                    
+                                   {% comment %} buttons {% endcomment %}
+                               
                                 <div class="flex justify-between mt-3 text-gray-500">
-                                    <button class="flex items-center space-x-2 hover:text-blue-400"
-                                            onclick="window.location.href = '{% url 'post_detail' post.id %}'">
+                                    <div class="flex items-center space-x-2 hover:text-blue-400" onclick="window.location.href = '{% url 'post_detail' post.id %}'">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                         </svg>
-                                        <span>{{ post.replies_count }}</span>
-                                    </button>
-
-                                    <button class="like-button flex items-center space-x-2 hover:text-red-400 {% if user in post.likes.all %}text-red-400{% endif %}" data-post-id="{{ post.id }}">
-                                        <svg class="w-5 h-5" fill="{% if user in post.likes.all %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                        <span class="replies-count">{{ post.total_replies }}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 hover:text-green-400 retweet-button" data-post-id="{{ post.id }}">
+                                        <svg class="w-5 h-5" fill="none" stroke="#000000" viewBox="0 0 24 24">
+                                            <path d="M19 7a1 1 0 0 0-1-1h-8v2h7v5h-3l3.969 5L22 13h-3V7zM5 17a1 1 0 0 0 1 1h8v-2H7v-5h3L6 6l-4 5h3v6z"></path></g></svg>
+                                        <span class="retweet-count">{{ post.total_retweets }}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 hover:text-red-500 like-button {% if post.is_liked %}liked{% endif %}" data-post-id="{{ post.id }}">
+                                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                        </svg>
                                         <span class="like-count">{{ post.total_likes }}</span>
-                                    </button>
-
-                                    <!-- In the post_list.html file -->
-                                    <button class="flex items-center space-x-2 hover:text-blue-400" onclick="showPopup('{{ post.id }}', '{{ post.content|escapejs }}', '{{ post.picture|default:'' }}')">
-                                        <svg class="m-2 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                            <g>
-                                                <path d="M22.772 10.506l-5.618-2.192-2.16-6.5c-.102-.307-.39-.514-.712-.514s-.61.207-.712.513l-2.16 6.5-5.62 2.192c-.287.112-.477.39-.477.7s.19.585.478.698l5.62 2.192 2.16 6.5c.102.306.39.513.712.513s.61-.207.712-.513l2.16-6.5 5.62-2.192c.287-.112.477-.39.477-.7s-.19-.585-.478-.697zm-6.49 2.32c-.208.08-.37.25-.44.46l-1.56 4.695-1.56-4.693c-.07-.21-.23-.38-.438-.462l-4.155-1.62 4.154-1.622c.208-.08.37-.25.44-.462l1.56-4.693 1.56 4.694c.07.212.23.382.438.463l4.155 1.62-4.155 1.622zM6.663 3.812h-1.88V2.05c0-.414-.337-.75-.75-.75s-.75.336-.75.75v1.762H1.5c-.414 0-.75.336-.75.75s.336.75.75.75h1.782v1.762c0 .414.336.75.75.75s.75-.336.75-.75V5.312h1.88c.415 0 .75-.336.75-.75s-.335-.75-.75-.75zm2.535 15.622h-1.1v-1.016c0-.414-.335-.75-.75-.75s-.75.336-.75.75v1.016H5.57c-.414 0-.75.336-.75.75s.336.75.75.75H6.6v1.016c0 .414.335.75.75.75s.75-.336.75-.75v-1.016h1.098c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z"></path>
-                                            </g>
-                                        </svg>AI
+                                    </div>
+                                    <div class="flex items-center space-x-2 hover:text-blue-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <span>{{ post.views }}</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 hover:text-blue-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                        </svg>
+                                    </div>
+                                    <button class="flex items-center space-x-2 hover:text-blue-400 ai-button" data-post-id="{{ post.id }}" data-post-content="{{ post.content|escapejs }}" data-post-image="{{ post.picture|default:'' }}">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                        <span>AI</span>
                                     </button>
                                 </div>
                             </div>
@@ -305,9 +341,9 @@
 
     <!-- The Modal -->
     <div id="imageModal" class="modal">
-        <span class="modal-close">&times;</span>
-        <span class="modal-nav modal-prev">&lsaquo;</span>
-        <span class="modal-nav modal-next">&rsaquo;</span>
+        <span class="modal-close">×</span>
+        <span class="modal-nav modal-prev">‹</span>
+        <span class="modal-nav modal-next">›</span>
         <img class="modal-content" id="modalImage">
     </div>
     
@@ -315,6 +351,9 @@
 
 
 <script>
+    
+
+
     let currentImageIndex = 0;
     const images = [{% for post in posts %}{% if post.picture %}'{{ post.picture }}',{% endif %}{% endfor %}];
 
@@ -364,31 +403,7 @@
 
 
 
-    
-    document.addEventListener('DOMContentLoaded', function() {
-const imageUpload = document.getElementById('image-upload');
-const imagePreview = document.getElementById('image-preview');
-const previewImage = document.getElementById('preview-image');
-const removeImage = document.getElementById('remove-image');
 
-imageUpload.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            imagePreview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
-    }
-});
-
-removeImage.addEventListener('click', function() {
-    imageUpload.value = '';
-    imagePreview.classList.add('hidden');
-    previewImage.src = '';
-});
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     const messageBox = document.getElementById('message-box');
@@ -526,8 +541,86 @@ function displayMessage(sender, message) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+$(document).ready(function() {
+    // Like Button Functionality
+    $(".like-button").on("click", function() {
+        const $button = $(this);
+        const postId = $button.data('post-id');
+        const $likeCount = $button.find('.like-count');
+
+        $.ajax({
+            url: '{% url 'like_post' %}',
+            type: 'POST',
+            data: JSON.stringify({'post_id': postId}),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(response) {
+                if (response.liked) {
+                    $button.addClass('liked');
+                } else {
+                    $button.removeClass('liked');
+                }
+                $likeCount.text(response.total_likes);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error liking post:", error);
+            }
+        });
+    });
+
+    // Retweet Button Functionality
+    $(".retweet-button").on("click", function() {
+        const $button = $(this);
+        const postId = $button.data('post-id');
+        const $retweetCount = $button.find('.retweet-count');
+
+        $.ajax({
+            url: '{% url 'retweet_post' %}',
+            type: 'POST',
+            data: JSON.stringify({'post_id': postId}),
+            contentType: 'application/json',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            success: function(response) {
+                if (response.retweeted) {
+                    $button.addClass('retweeted');
+                } else {
+                    $button.removeClass('retweeted');
+                }
+                $retweetCount.text(response.total_retweets);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error retweeting post:", error);
+            }
+        });
+    });
+
+    // AI Button Functionality
+    $(".ai-button").on("click", function() {
+        const postId = $(this).data('post-id');
+        const postContent = $(this).data('post-content');
+        const postImage = $(this).data('post-image');
+        showPopup(postId, postContent, postImage);
+    });
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 </script>
 
 
 </body>
 </html>
+
