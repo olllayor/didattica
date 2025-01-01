@@ -1,43 +1,40 @@
-{% load static %}
-{% load widget_tweaks %}
-
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DidatticaUz</title>
-
-    <link rel="icon" href="{% static 'images/favicon.jpg' %}" type="image/jpg">
-</head>
-
-<body>
-    <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form action="">
-                    <h2>Welcome DidatticaUz</h2>
-                    <h4>Passing exams with us isn't just about grades</h4>
-                    <h4>It's about unlocking the doors to your future success
-                    </h4>
-                    <div class="student">
-                      <a href="/students/studentclick" class="btn">Student</a>
-                    </div>
-                    <div class="teacher">                        
-                      <a href="/teachers/teacherclick" class="btn">Teacher</a>
-                    </div>
-                    {% comment %} <div class="admin">                        
-                      <a href="/adminclick" class="btn">Admin</a>
-                    </div>             {% endcomment %}
-                </form>
-            </div>
-        </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <section class="min-h-screen flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <form action="">
+          <h2 class="text-2xl font-bold text-center mb-4">
+            Welcome DidatticaUz
+          </h2>
+          <h4 class="text-gray-600 text-center mb-6">
+            Passing exams with us isn't just about grades
+          </h4>
+          <h4 class="text-gray-600 text-center mb-6">
+            It's about unlocking the doors to your future success
+          </h4>
+          <div class="space-y-4">
+            <a
+              href="/students/studentclick"
+              class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 block text-center"
+              >Student</a
+            >
+            <a
+              href="/teachers/teacherclick"
+              class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 block text-center"
+              >Teacher</a
+            >
+          </div>
+        </form>
+      </div>
     </section>
     {% include 'exams/footer.html' %}
-</body>
+  </body>
 </html>

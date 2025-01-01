@@ -1,52 +1,48 @@
-{% extends 'exams/adminbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
-
-<div class="content-wrapper">
-    <div class="content-header">
-        <h1 class="title">Students</h1>
-        <div class="update-info">
-        </div>
+{% extends 'exams/adminbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Students</h1>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b">Name</th>
+            <th class="py-2 px-4 border-b">Phone</th>
+            <th class="py-2 px-4 border-b">Username</th>
+            <th class="py-2 px-4 border-b">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in teachers %}
+          <tr>
+            <td class="py-2 px-4 border-b">{{t.get_name}}</td>
+            <td class="py-2 px-4 border-b">{{t.mobile}}</td>
+            <td class="py-2 px-4 border-b">{{t.username}}</td>
+            <td class="py-2 px-4 border-b">
+              <a
+                href="{% url 'approve-teacher' t.id  %}"
+                class="text-blue-500 hover:text-blue-700"
+              >
+                <i class="fas fa-edit"></i>
+              </a>
+              <a
+                href="{% url 'reject-teacher' t.id  %}"
+                class="text-red-500 hover:text-red-700"
+              >
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="py-2 px-4 border-b text-center">
+              There are no pending teacher yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Username</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for t in teachers %}
-                <tr>
-                    <td>{{t.get_name}}</td>
-                    <td>{{t.mobile}}</td>
-                    <td>{{t.username}}</td>
-                    <td class="actions">
-                        <a class="btn-edit" href="{% url 'approve-teacher' t.id  %}">
-                            <small class="fas fa-edit"></small>
-                        </a>
-                        <a class="btn-delete" href="{% url 'reject-teacher' t.id  %}">
-                            <small class="fas fa-trash"></small>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">There are no pending teacher yet.</td>
-                </tr>
-                {% endfor %}
-        </table>
-    </div>
+  </div>
 </div>
-
-
-
-
-
 {% endblock %}

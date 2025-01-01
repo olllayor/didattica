@@ -1,47 +1,64 @@
 <!DOCTYPE html>
-{% load widget_tweaks %}
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/studentlogin.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-</head>
-<body>
-    <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form action="" method="post" class="box">
-                    {% csrf_token %}
-                    <h2>Login</h2>
-                    <div class="inputbox">
-                        <ion-icon name="at-circle"></ion-icon>
-                        {{ form.username|add_class:"form-control" }}
-                        <label for="username">Username</label>
-                    </div>
-                    <div class="inputbox">
-                        <ion-icon name="lock-closed"></ion-icon>
-                        {{ form.password|add_class:"form-control" }}
-                        <label for="password">Password</label>
-                    </div>
-                    <div class="forget">
-                        <label for="">
-                            <input type="checkbox" name="remember_me">
-                            Remember Me
-                            <a href="#">Forget password</a>
-                        </label>
-                    </div>
-                    <button type="submit">Login</button>
-                    <div class="register">
-                        <p>Don't have an account <a href="studentsignup">Register</a></p>
-                    </div>
-                </form>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <section class="min-h-screen flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <form action="" method="post" class="space-y-4">
+          {% csrf_token %}
+          <h2 class="text-2xl font-bold text-center mb-4">Login</h2>
+          <div class="space-y-2">
+            <div>
+              <label class="text-gray-600">Username</label>
+              <input
+                type="text"
+                name="username"
+                required
+                class="w-full p-2 border rounded"
+              />
             </div>
-        </div>
+            <div>
+              <label class="text-gray-600">Password</label>
+              <input
+                type="password"
+                name="password"
+                required
+                class="w-full p-2 border rounded"
+              />
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <label class="flex items-center">
+              <input type="checkbox" name="remember_me" class="mr-2" />
+              <span class="text-gray-600">Remember Me</span>
+            </label>
+            <a href="#" class="text-blue-500 hover:text-blue-700"
+              >Forget password</a
+            >
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          >
+            Login
+          </button>
+          <div class="text-center">
+            <p class="text-gray-600">
+              Don't have an account?
+              <a href="studentsignup" class="text-blue-500 hover:text-blue-700"
+                >Register</a
+              >
+            </p>
+          </div>
+        </form>
+      </div>
     </section>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     {% include 'exams/footer.html' %}
-</body>
+  </body>
 </html>

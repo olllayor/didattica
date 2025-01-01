@@ -1,50 +1,37 @@
-{% extends 'students/studentbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/student_exam.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'css/admin_view_student.css' %}"
-/>
-
-<div class="content-wrapper">
-  <div class="content-header">
-    <h1 class="title">Results</h1>
-    <div class="update-info"></div>
-  </div>
-  <div class="table-container">
-    {% if results %}
-    <table>
-      <thead>
-        <tr>
-          <th>Course</th>
-          <th>Total marks</th>
-          <th>Number of attempts</th>
-          <th>Teacher</th>
-          <th>Exam date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for t in results %}
-        <tr>
-          <td>{{t.exam}}</td>
-          <td>{{t.marks}}</td>
-          <td>Attempt {{ forloop.counter }}</td>
-          <td>{{teacher_name}}</td>
-          <td>{{t.date}}</td>
-          
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% else %}
-    <p class="text-align:center">First you need to solve the test</p>
-    {% endif %}
+{% extends 'students/studentbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Results</h1>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b">Course</th>
+            <th class="py-2 px-4 border-b">Total Marks</th>
+            <th class="py-2 px-4 border-b">Number of Attempts</th>
+            <th class="py-2 px-4 border-b">Teacher</th>
+            <th class="py-2 px-4 border-b">Exam Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if results %}
+          {% for t in results %}
+          <tr>
+            <td class="py-2 px-4 border-b">{{t.exam}}</td>
+            <td class="py-2 px-4 border-b">{{t.marks}}</td>
+            <td class="py-2 px-4 border-b">Attempt {{ forloop.counter }}</td>
+            <td class="py-2 px-4 border-b">{{teacher_name}}</td>
+            <td class="py-2 px-4 border-b">{{t.date}}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="5" class="py-2 px-4 border-b text-center">First you need to solve the test</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-
 {% endblock %}

@@ -1,43 +1,18 @@
-{% extends 'teachers/teacherbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/student_exam.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" type="text/css" href="{% static 'css/admin_dashboard.css' %}">
-<div class="container"> 
-    <div class="courses-container">
-        {% comment %} <div class="course-card">
-            <div class="course-info">
-                <h2>Registered Students</h2>
-                <br>
-                <p>{{total_student}}</p>
-                
-
-            </div>
-            
-        </div>         {% endcomment %}
-    
-        <div class="course-card">
-            <div class="course-info">
-                <h2><i class="fas fa-book"></i>  Total Courses </h2>
-                <p>Created by @{{ teacher_name }}</p>
-                
-                <p>{{total_course}}</p>                
-
-            </div>
-            
-        </div>
-        <div class="course-card">
-            <div class="course-info">
-                <h2>Total Questions</h2>
-                <br>
-                <p>{{total_question}}</p>
-                
-            </div>
-            
-        </div>
+{% extends 'teachers/teacherbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Teacher Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Total Courses</h2>
+        <p class="text-gray-600">Created by @{{ teacher_name }}</p>
+        <p class="text-2xl font-bold">{{total_course}}</p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Total Questions</h2>
+        <p class="text-2xl font-bold">{{total_question}}</p>
+      </div>
     </div>
-
+  </div>
+</div>
 {% endblock %}

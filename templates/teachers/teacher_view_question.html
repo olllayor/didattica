@@ -1,59 +1,42 @@
-{% extends 'teachers/teacherbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-<head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/admin_view_student.css' %}">
-</head> 
-
-
-<div class="content-wrapper">
-    <div class="content-header">
-        <h1 class="title">Available Questions</h1>
-        <div class="update-info">
-            
-           
-        </div>
+{% extends 'teachers/teacherbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Available Questions</h1>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b">Course Name</th>
+            <th class="py-2 px-4 border-b">Total Question</th>
+            <th class="py-2 px-4 border-b">Total Marks</th>
+            <th class="py-2 px-4 border-b">View</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in courses %}
+          <tr>
+            <td class="py-2 px-4 border-b">{{c.course_name}}</td>
+            <td class="py-2 px-4 border-b">{{c.question_number}}</td>
+            <td class="py-2 px-4 border-b">{{c.total_marks}}</td>
+            <td class="py-2 px-4 border-b">
+              <a
+                href="{% url 'see-question' c.id  %}"
+                class="text-blue-500 hover:text-blue-700"
+              >
+                <i class="fa fa-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="py-2 px-4 border-b text-center">
+              There are no question yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Course Name</th>
-                    <th>Total question</th>
-                    <th>Total marks</th>
-                    <th>View questions</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                {% for c in courses %}
-                <tr>
-                    <td>{{c.course_name}}</td>
-                    <td>{{c.question_number}}</td>
-                    <td>{{c.total_marks}}</td>
-                    
-                    <td class="actions">
-                        
-                        <a class="btn-delete" href="{% url 'see-question' c.id  %}">
-                            <small class="fa fa-eye"></small>
-                        </a>
-                    </td>
-                    
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">There are no question yet.</td>
-                </tr>
-                {% endfor %}
-        </table>
-    </div>
+  </div>
 </div>
-
-
-
-
-
 {% endblock %}

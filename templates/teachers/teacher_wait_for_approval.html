@@ -1,49 +1,50 @@
+<!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Request Review</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/teacher_wait_for_approval.css' %}">
-</head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>Your request is being reviewed</h1>
-        <p>Please wait while we process your request. This should only take a few moments.</p>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <div class="text-center">
+          <h1 class="text-2xl font-bold mb-4">
+            Your request is being reviewed
+          </h1>
+          <p class="text-gray-600 mb-6">
+            Please wait while we process your request. This should only take a
+            few moments.
+          </p>
+          <div class="flex items-center justify-center space-x-2">
+            <i class="fas fa-at-circle text-gray-600"></i>
+            <span id="receivedTime"
+              >Your request was received at <span id="requestTime"></span
+            ></span>
+          </div>
+          <a
+            href="/logout"
+            class="mt-6 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            ><i class="fas fa-sign-out-alt mr-2"></i>Logout</a
+          >
+        </div>
+      </div>
     </div>
-    <div class="status">
-        <div class="status-item">
-            <ion-icon name="at-circle"></ion-icon>
-            <span id="receivedTime" >Your request was received at <span id="requestTime"></span></span>
-        </div>        
-    </div>
-    <a href="/logout" class="logout-button"><i class="fas fa-sign-out-alt"></i> Logout</a>
-
-    
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
         function updateTime() {
-            var now = new Date();
-            var timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            
-            document.getElementById('requestTime').textContent = timeString;
-            
+          var now = new Date();
+          var timeString = now.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          document.getElementById("requestTime").textContent = timeString;
         }
-    
         updateTime();
-        // Update the time every minute
         setInterval(updateTime, 60000);
-    });
-    
-    
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>

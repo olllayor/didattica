@@ -4,37 +4,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Settings - API Keys</title>
+    <title>API Keys</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
   </head>
-  <body class="bg-gray-100 text-gray-900">
-    <div class="flex">
-      <!-- Left Menu (Sidebar) -->
+  <body class="bg-gray-50 text-gray-900">
+    <div class="flex min-h-screen">
       {% include 'chat/sidebar.html' %}
 
-      <!-- Main Content Area -->
-      <div class="ml-64 w-full p-4">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          {% if messages %}
-          <div class="mb-4" id="message-container">
-            {% for message in messages %}
-            <div
-              class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
-              <span class="block sm:inline">{{ message }}</span>
-            </div>
-            {% endfor %}
-          </div>
-          {% endif %}
-
+      <main class="flex-grow border-l border-r border-gray-200">
+        <div class="max-w-2xl mx-auto p-4">
           <h2 class="text-2xl font-bold mb-4">API Keys</h2>
           <form method="POST">
-            {% csrf_token %}
-            {% for field in form %}
+            {% csrf_token %} {% for field in form %}
             <div class="mb-4">
               <label
                 class="block text-gray-700 text-sm font-bold mb-2"
@@ -50,15 +38,12 @@
                   name="{{ field.name }}"
                   value="{{ field.value|default:'' }}"
                 />
-                <button 
+                <button
                   type="button"
                   class="toggle-visibility absolute inset-y-0 right-0 flex items-center px-2"
                   data-target="{{ field.id_for_label }}"
                 >
-                  <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
+                  <i class="fas fa-eye text-gray-500"></i>
                 </button>
               </div>
             </div>
@@ -70,45 +55,34 @@
               >
                 Cancel
               </button>
-              <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg">
+              <button
+                type="submit"
+                class="bg-blue-400 text-white py-2 px-4 rounded-lg"
+              >
                 Save
               </button>
             </div>
           </form>
         </div>
-      </div>
+      </main>
     </div>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          var messageContainer = document.getElementById('message-container');
-          if (messageContainer) {
-              setTimeout(function() {
-                  messageContainer.style.display = 'none';
-              }, 3000); // 3 seconds
-          }
 
-          // Toggle visibility functionality
-          var toggleButtons = document.querySelectorAll('.toggle-visibility');
-          toggleButtons.forEach(function(button) {
-              button.addEventListener('click', function() {
-                  var targetId = this.getAttribute('data-target');
-                  var inputField = document.getElementById(targetId);
-                  if (inputField.type === 'password') {
-                      inputField.type = 'text';
-                      this.innerHTML = `
-                          <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                          </svg>`;
-                  } else {
-                      inputField.type = 'password';
-                      this.innerHTML = `
-                          <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>`;
-                  }
-              });
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButtons = document.querySelectorAll(".toggle-visibility");
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-target");
+            const inputField = document.getElementById(targetId);
+            if (inputField.type === "password") {
+              inputField.type = "text";
+              this.innerHTML = '<i class="fas fa-eye-slash text-gray-500"></i>';
+            } else {
+              inputField.type = "password";
+              this.innerHTML = '<i class="fas fa-eye text-gray-500"></i>';
+            }
           });
+        });
       });
     </script>
   </body>

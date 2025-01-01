@@ -1,98 +1,153 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Detail</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-    {% load static %}
-    <style>
-        .reply-box {
-            background-color: #f9fafb;
-        }
-        .reply-header {
-            border-bottom: 2px solid #e5e7eb;
-        }
-        .original-post {
-            border-bottom: 2px solid #e5e7eb;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-900">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Replied Tweets</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <div class="flex min-h-screen">
+      {% include 'chat/sidebar.html' %}
 
-<div class="container mx-auto p-4">
-
-    <!-- Post Detail -->
-    <div class="original-post bg-white p-6 rounded-lg shadow-lg mb-6">
-        <div class="flex items-center mb-2">
-            <div class="mr-2">
-                <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
-            </div>
-            <div>
-                <h2 class="text-lg font-bold">{{ post.user.username }}</h2>
-                <p class="text-gray-500 text-sm">{{ post.created_at }}</p>
-            </div>
-        </div>
-        <p class="text-gray-700">{{ post.content }}</p>
-        
-        <div class="mt-2 flex space-x-4">
-            <button class="like-button action-button text-gray-500 hover:text-red-500 focus:outline-none {% if user in post.likes.all %}liked{% endif %}" data-post-id="{{ post.id }}" data-likes-count="{{ post.total_likes }}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                </svg>
-                <span class="likes-count text-sm">{{ post.total_likes }}</span>
-            </button>
-            <a href="{% url 'post_detail' post.id %}" class="action-button text-gray-500 hover:text-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
-                </svg>
-                <span class="text-sm">{{ post.replies_count }}</span>
-            </a>
-            <button class="action-button text-gray-500 hover:text-green-500 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Reply Box -->
-    <div class="reply-box bg-white p-6 rounded-lg shadow-lg mb-6">
-        <h3 class="text-xl font-semibold mb-4">Post your reply</h3>
-        <form id="post-form" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <textarea name="content" id="tweet-content" rows="3" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="What's happening?"></textarea>
-                <input type="file" name="picture" id="image-upload" class="w-fit p-2 border rounded-lg mt-2">
-                <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Post</button>
-        </form>
-    </div>
-
-    <!-- Replies -->
-    <div class="space-y-6">
-        <h3 class="reply-header text-xl font-semibold mb-4">Replies</h3>
-        {% for reply in replies %}
-        <div class="bg-white p-4 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="mr-2">
-                    <img src="{% static 'images/default_avatar.png' %}" alt="Avatar" class="w-10 h-10 rounded-full">
+      <main class="flex-grow border-l border-r border-gray-200">
+        <div class="max-w-2xl mx-auto">
+          <!-- Original Post -->
+          <div class="p-4 border-b border-gray-200">
+            <div class="flex">
+              <img
+                src="{% static 'images/default_avatar.png' %}"
+                alt="{{ post.user.username }}"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div class="flex-grow">
+                <div class="flex items-center">
+                  <span class="font-bold mr-1">{{ post.user.first_name }}</span>
+                  {% if post.user.is_verified %}
+                  <i class="fas fa-check-circle text-blue-400 ml-1"></i>
+                  {% endif %}
+                  <span class="text-gray-500 ml-1"
+                    >@{{ post.user.username }} · {{ post.created_at|timesince
+                    }}</span
+                  >
                 </div>
-                <div>
-                    <h2 class="text-lg font-bold">{{ reply.user.username }}</h2>
-                    <p class="text-gray-500 text-sm">{{ reply.created_at }}</p>
-                </div>
-            </div>
-            
-            <p class="text-gray-700">{{ reply.content }}</p>
-        </div>
-            {% if post.picture %}
-                <img src="{{ post.picture }}" alt="Image" class="h-auto max-w-lg rounded-lg cursor-pointer" onclick="openModal('{{ post.picture }}')"  />
+                <p class="mt-2 text-s font-bolder">{{ post.content }}</p>
+                {% if post.picture %}
+                <img
+                  src="{{ post.picture }}"
+                  alt="Post image"
+                  class="mt-3 rounded-2xl max-h-96 w-full object-cover cursor-pointer"
+                  onclick="openModal('{{ post.picture }}')"
+                />
                 {% endif %}
-        {% empty %}
-        <p>No replies yet.</p>
-        {% endfor %}
+                <div class="flex justify-between mt-3 text-gray-500">
+                  <button
+                    class="like-button flex items-center space-x-2 hover:text-blue-400 {% if user in post.likes.all %}text-blue-400{% endif %}"
+                    data-post-id="{{ post.id }}"
+                  >
+                    <i class="far fa-heart"></i>
+                    <span class="likes-count">{{ post.total_likes }}</span>
+                  </button>
+                  <a
+                    href="{% url 'post_detail' post.id %}"
+                    class="flex items-center space-x-2 hover:text-blue-400"
+                  >
+                    <i class="far fa-comment"></i>
+                    <span>{{ post.replies_count }}</span>
+                  </a>
+                  <button
+                    class="flex items-center space-x-2 hover:text-blue-400"
+                  >
+                    <i class="fas fa-retweet"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Replies -->
+          {% for reply in replies %}
+          <div class="p-4 border-b border-gray-200">
+            <div class="flex">
+              <img
+                src="{% static 'images/default_avatar.png' %}"
+                alt="{{ reply.user.username }}"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div class="flex-grow">
+                <div class="flex items-center">
+                  <span class="font-bold mr-1"
+                    >{{ reply.user.first_name }}</span
+                  >
+                  <span class="text-gray-500 ml-1"
+                    >@{{ reply.user.username }} · {{ reply.created_at|timesince
+                    }}</span
+                  >
+                </div>
+                <p class="mt-2 text-s">{{ reply.content }}</p>
+                {% if reply.picture %}
+                <img
+                  src="{{ reply.picture }}"
+                  alt="Reply image"
+                  class="mt-3 rounded-2xl max-h-96 w-full object-cover cursor-pointer"
+                  onclick="openModal('{{ reply.picture }}')"
+                />
+                {% endif %}
+                <div class="flex justify-between mt-3 text-gray-500">
+                  <button
+                    class="like-button flex items-center space-x-2 hover:text-blue-400"
+                    data-post-id="{{ reply.id }}"
+                  >
+                    <i class="far fa-heart"></i>
+                    <span class="likes-count">0</span>
+                  </button>
+                  <button
+                    class="flex items-center space-x-2 hover:text-blue-400"
+                  >
+                    <i class="fas fa-retweet"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </main>
     </div>
 
-</div>
+    <!-- The Modal -->
+    <div
+      id="myModal"
+      class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 p-8"
+    >
+      <span
+        class="absolute top-4 right-8 text-white text-4xl cursor-pointer"
+        onclick="closeModal()"
+        >&times;</span
+      >
+      <img class="modal-content mx-auto max-w-full max-h-full" id="img01" />
+    </div>
 
-</body>
+    <script>
+      function openModal(src) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("img01");
+        modal.style.display = "block";
+        modalImg.src = src;
+      }
+
+      function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+      }
+    </script>
+  </body>
 </html>

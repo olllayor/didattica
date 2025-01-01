@@ -1,51 +1,83 @@
-{% extends 'exams/adminbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/update_student.css' %}">
-
-
-<body>
-  
-<div class="student-page-container">
-    <form method="post" autocomplete="off" enctype="multipart/form-data">
-        {% csrf_token %}
-        <!-- Personal Information Section -->
-        <div class="section">
-            <h2 class="section-title"><i class="fas fa-user"></i> Personal Information</h2>
-            <div class="input-container">
-                <label for="first_name">First Name</label>
-                {% render_field userForm.first_name id="first-name" %}
-            </div>
-            <div class="input-container">
-                <label for="last_name">Last Name</label>
-                {% render_field userForm.last_name id="last-name" %}
-            </div>
-            <div class="input-container">
-                <label for="username">Username</label>
-                {% render_field userForm.username id="username" %}
-            </div>
-            
-            <div class="input-container">
-                <label for="student_id">Student ID</label>
-                {% render_field studentForm.student_id id="student_id" %}
-            </div>
-            <div class="input-container">
-                <label for="mobile">Phone</label>
-                {% render_field studentForm.mobile id="phone" %}
-            </div>
-            <div class="input-container">
-                <label for="password">Password</label>
-                {% render_field userForm.password id="password" %}
-            </div>
-        </div>     
-        <input type="submit" class="btn-update" value="Update">
-
+{% extends 'exams/adminbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Update Student</h1>
+    <form
+      method="post"
+      autocomplete="off"
+      enctype="multipart/form-data"
+      class="space-y-4"
+    >
+      {% csrf_token %}
+      <div class="space-y-2">
+        <div>
+          <label class="text-gray-600">First Name</label>
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label class="text-gray-600">Last Name</label>
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label class="text-gray-600">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label class="text-gray-600">Student ID</label>
+          <input
+            type="text"
+            id="student_id"
+            name="student_id"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label class="text-gray-600">Phone</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+        <div>
+          <label class="text-gray-600">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="w-full p-2 border rounded"
+          />
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      >
+        Update
+      </button>
     </form>
+  </div>
 </div>
-</body>
-
-{% endblock content %}
-
-
+{% endblock %}

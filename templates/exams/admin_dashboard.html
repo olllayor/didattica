@@ -1,49 +1,45 @@
-{% extends 'exams/adminbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'css/admin_dashboard.css' %}">
-<div class="container"> 
-    <div class="courses-container">
-        <div class="course-card">
-            <div class="course-info">
-                <h2>Registered Students</h2>
-                <p>{{total_student}}</p>
-                <button><a href="admin-view-student">View Students</a></button>
-
-            </div>
-            
-        </div>
-        <div class="course-card">
-            <div class="course-info">
-                <h2>Total Teachers</h2>
-                <p>{{total_teacher}}</p>
-                <button><a href="admin-view-teacher">View Teachers</a></button>
-
-
-            </div>
-            
-        </div>
-    
-        <div class="course-card">
-            <div class="course-info">
-                <h2>Total Courses</h2>
-                <p>{{total_course}}</p>
-                <button><a href="admin-view-course">View Courses</a></button>
-
-            </div>
-            
-        </div>
-        <div class="course-card">
-            <div class="course-info">
-                <h2>Available Questions</h2>
-                <p>{{total_question}}</p>
-                <button><a href="admin-view-question">View Questions</a></button>
-
-            </div>
-            
-        </div>
+{% extends 'exams/adminbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Registered Students</h2>
+        <p class="text-2xl font-bold">{{total_student}}</p>
+        <a
+          href="admin-view-student"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >View Students</a
+        >
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Total Teachers</h2>
+        <p class="text-2xl font-bold">{{total_teacher}}</p>
+        <a
+          href="admin-view-teacher"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >View Teachers</a
+        >
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Total Courses</h2>
+        <p class="text-2xl font-bold">{{total_course}}</p>
+        <a
+          href="admin-view-course"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >View Courses</a
+        >
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4">Available Questions</h2>
+        <p class="text-2xl font-bold">{{total_question}}</p>
+        <a
+          href="admin-view-question"
+          class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >View Questions</a
+        >
+      </div>
     </div>
-
+  </div>
+</div>
 {% endblock %}

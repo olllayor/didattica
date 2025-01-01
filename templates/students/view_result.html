@@ -1,28 +1,22 @@
-{% extends 'students/studentbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-<head>
-    <title>Results</title>
-</head>
-{% block content %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/student_exam.css' %}">
-
-    <div class="courses-container">
-        {% if courses %}
-            {% for t in courses %}
-            <div class="course-card">
-                <div class="course-info">
-                    <h2>{{ t.course_name }}</h2>
-                    <p>Teacher: @{{ t.creator.username }}</p> <!-- Use the get_name method from the Teacher model -->
-                    <button><a href="{% url 'check-marks' t.id %}">View result</a></button>
-
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <div class="no-courses-message">
-                <p>Courses will be added soon</p>
-            </div>
-        {% endif %}
+{% extends 'students/studentbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Results</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% if courses %} {% for t in courses %}
+      <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold">{{ t.course_name }}</h2>
+        <p class="text-gray-600">Teacher: @{{ t.creator.username }}</p>
+        <a
+          href="{% url 'check-marks' t.id %}"
+          class="mt-4 inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >View Result</a
+        >
+      </div>
+      {% endfor %} {% else %}
+      <p class="text-gray-600">Courses will be added soon</p>
+      {% endif %}
     </div>
+  </div>
+</div>
 {% endblock %}

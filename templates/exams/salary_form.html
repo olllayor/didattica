@@ -1,25 +1,28 @@
-{% extends 'exams/adminbase.html' %}
-{% load widget_tweaks %}
-{% load static %}
-{% block content %}
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/salary_form.css' %}">
-</head>
-
-
-<h3 style="text-align:center">Enter Salary Amount:</h3>
-<div class="form-container">
-    <form method="POST" autocomplete="off">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="salary">Salary (per month)</label>
-            {% render_field teacherSalary.salary class="form-control"%}
+{% extends 'exams/adminbase.html' %} {% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Enter Salary Amount</h1>
+    <form method="POST" autocomplete="off" class="space-y-4">
+      {% csrf_token %}
+      <div class="space-y-2">
+        <div>
+          <label class="text-gray-600">Salary (per month)</label>
+          <input
+            type="text"
+            id="salary"
+            name="salary"
+            required
+            class="w-full p-2 border rounded"
+          />
         </div>
-        <button type="submit" class="btn btn-success">Approve</button>
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+      >
+        Approve
+      </button>
     </form>
+  </div>
 </div>
-
-
 {% endblock %}

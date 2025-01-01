@@ -1,38 +1,40 @@
-{% load static %}
-{% load widget_tweaks %}
-
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/studentclick.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DidatticaUz</title>
-</head>
-
-<body>
-    <section>
-        <div class="form-box">
-            <div class="form-value">
-                <form action="">
-                    {% csrf_token %}
-                    <h2>Hello Student</h2>
-                    <h4>Join us and upgrate your level
-                    </h4>
-                    <div class="signup">
-                        <button type="button" class="btn" onclick="window.location.href='{% url 'studentsignup' %}'">Sign Up</button>
-                    </div>
-                    <div class="login">                        
-                        <button type="button" class="btn" onclick="window.location.href='{% url 'studentlogin' %}'">Login</button>
-                    </div>
-                      
-                  
-                    
-                </form>
-            </div>
-        </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <section class="min-h-screen flex items-center justify-center">
+      <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <form action="">
+          {% csrf_token %}
+          <h2 class="text-2xl font-bold text-center mb-4">Hello Student</h2>
+          <h4 class="text-gray-600 text-center mb-6">
+            Join us and upgrade your level
+          </h4>
+          <div class="space-y-4">
+            <button
+              type="button"
+              onclick="window.location.href='{% url 'studentsignup' %}'"
+              class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+            >
+              Sign Up
+            </button>
+            <button
+              type="button"
+              onclick="window.location.href='{% url 'studentlogin' %}'"
+              class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
     </section>
     {% include 'exams/footer.html' %}
-</body>
+  </body>
 </html>
