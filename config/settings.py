@@ -122,23 +122,23 @@ WSGI_APPLICATION = 'config.wsgi.app'
 #         'PORT': '5432',
 #     }
 # }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'database', # This is where you put the name of the db file.
-#                  # If one doesn't exist, it will be created at migration time.
-#     }
-# }
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': os.getenv('PGDATABASE'),
-    'USER': os.getenv('PGUSER'),
-    'PASSWORD': os.getenv('PGPASSWORD'),
-    'HOST': os.getenv('PGHOST'),
-    'PORT': os.getenv('PGPORT', 5432),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'database', # This is where you put the name of the db file.
+                 # If one doesn't exist, it will be created at migration time.
     }
 }
+# DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'NAME': os.getenv('PGDATABASE'),
+#     'USER': os.getenv('PGUSER'),
+#     'PASSWORD': os.getenv('PGPASSWORD'),
+#     'HOST': os.getenv('PGHOST'),
+#     'PORT': os.getenv('PGPORT', 5432),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
